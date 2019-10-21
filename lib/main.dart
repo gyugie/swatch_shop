@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import './screens/splash_screen.dart';
 import './screens/product_overview_screen.dart';
 import './providers/auth.dart';
 import './screens/auth_screens.dart';
@@ -36,7 +37,11 @@ class MyApp extends StatelessWidget {
               ),
             )
           ),
-          home: authData.isAuth ? ProductOverviewScreen() : AuthScreen(),
+          home: authData.isAuth ? ProductOverviewScreen() : FutureBuilder(
+            future: authData.tryToAutoLogin(),
+            builder: (ctx, authSnapShot) => 
+              authSnapShot.connectionState == ConnectionState.waiting ? SplashScreen() : AuthScreen(),
+          ),
         ),
       ),
     );

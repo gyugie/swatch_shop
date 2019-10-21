@@ -9,6 +9,7 @@ class Auth with ChangeNotifier{
   String _token;
   DateTime _expiredToken;
   String _userId;
+  Timer _timer;
   
   bool get isAuth{
     return token != null;
@@ -66,4 +67,23 @@ class Auth with ChangeNotifier{
   Future<void> signUp(String email, String password) async {
     return _authentication(email, password, 'accounts:signUp');
   }
+
+  Future<void> tryToAutoLogin() async {
+    final prefs         = await SharedPreferences.getInstance();
+    final extractData   = json.decode(prefs.getString('userData')) as Map<String, Object>;
+    final expiredDate   = DateTime.parse(extractData['expiredDate']);
+
+    if(expiredDate.isBefore(DateTime.now())){
+      return false;
+    }
+
+    _token        = extractData['token'];
+    _userId       = extractData['userId'];
+    _expiredToken = expiredDate;
+
+    notifyListeners(); 
+    return true;
+  }
+
+ 
 }
