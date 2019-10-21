@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:circular_bottom_navigation/circular_bottom_navigation.dart';
 import 'package:circular_bottom_navigation/tab_item.dart';
-import 'package:swatch_shop/screens/home_screen.dart';
+import '../screens/favorite_screen.dart';
+import '../screens/home_screen.dart';
+import '../screens/order_screen.dart';
+import '../screens/user_profile_screen.dart';
 
 class OverviewScreen extends StatefulWidget {
   @override
@@ -49,13 +52,13 @@ class _OverviewScreenState extends State<OverviewScreen> {
         _page = HomeScreen();
         break;
       case 1:
-         _page = HomeScreen();
+         _page = FavoritesScreen();
         break;
       case 2:
-         _page = HomeScreen();
+         _page = OrderScreen();
         break;
       case 3:
-         _page = HomeScreen();
+         _page = UserProfileScreen();
         break;
     }
 
@@ -72,7 +75,7 @@ class _OverviewScreenState extends State<OverviewScreen> {
       controller: _navigationController,
       barHeight: bottomNavBarHeight,
       barBackgroundColor: Colors.amber,
-      animationDuration: Duration(milliseconds: 300),
+      animationDuration: Duration(milliseconds: 800),
       selectedIconColor: Colors.blueGrey,
       normalIconColor: Colors.white,
       circleStrokeWidth: 3,
