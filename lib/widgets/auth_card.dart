@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:swatch_shop/providers/http_exception.dart';
+import '../providers/auth.dart';
 
 enum AuthMode {Signup, Login}
 
@@ -19,8 +22,30 @@ class _AuthCardState extends State<AuthCard> {
   FocusNode confirmPasswordFocus      = new FocusNode();
   final _passwordController           = TextEditingController();
   var _isLoading                      = false;
+  Map<String, String> _authData       = {
+    'email':'',
+    'password':'',
+  };
 
-  void _submit(){
+  void _showAlertDialog(String title,String message){
+     showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(title),
+        content: Text(message),
+        actions: <Widget>[
+          FlatButton(
+            child: Text('Okay', style: TextStyle(color: Colors.red)),
+            onPressed: (){
+              Navigator.of(context).pop();
+            },
+          )
+        ],
+      )
+    );
+  }
+
+  Future<void> _submit() async {
     if(!_formKey.currentState.validate()){
       return;
     }
@@ -30,9 +55,39 @@ class _AuthCardState extends State<AuthCard> {
       _isLoading = true;
     });
 
-     setState(() {
+    try{
+      if(_authMode == AuthMode.Login){
+         await Provider.of<Auth>(context).signUp(_authData['email'], _authData['password']);
+      } else {
+         await Provider.of<Auth>(context).signUp(_authData['email'], _authData['password']);
+
+        _showAlertDialog('Register Success','You have login now!');
+      }
+
+    } on HttpException catch (err) {
+      var errorMessage = 'Authentication failed';
+      if(err.toString().contains('EMAIL_EXISTS')){
+        errorMessage = 'This email address already axist';
+      } else if (err.toString().contains('INVALID_EMAIL')){
+        errorMessage = 'This in not valid email address';
+      } else if (err.toString().contains('WEAK_PASSWORD')){
+        errorMessage = 'This password is weak';
+      } else if (err.toString().contains('EMAIL_NOT_FOUND')){
+        errorMessage = 'Could not find a user with that email';
+      } else if (err.toString().contains('INVALID_PASSWORD')){
+        errorMessage = 'Invalid Password';
+      }
+
+      _showAlertDialog('An error occured!', errorMessage);
+    } catch (err){
+      var errorMessage = 'Could not authenticate, please try again later';
+      _showAlertDialog('An error occured!', errorMessage);
+    }
+
+      setState(() {
       _isLoading = false;
     });
+   
   }
 
   void _switchAuthMode(){
@@ -94,7 +149,7 @@ class _AuthCardState extends State<AuthCard> {
                   }
                 },
                 onSaved: (value){
-
+                  _authData['email'] = value;
                 },
               ),
 
@@ -135,7 +190,7 @@ class _AuthCardState extends State<AuthCard> {
                   }
                 },
                 onSaved: (value){
-
+                  _authData['password'] = value;
                 },
               ),
               
