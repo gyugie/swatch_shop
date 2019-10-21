@@ -41,8 +41,8 @@ class Auth with ChangeNotifier{
       _token            = responseData['idToken'];
       _expiredToken     = DateTime.now().add(Duration(seconds: int.parse(responseData['expiresIn'])));
       _userId           = responseData['localId'];
-
       notifyListeners();
+      _autoLogout();
 
       //set session
       final prefs     = await SharedPreferences.getInstance();
@@ -85,5 +85,28 @@ class Auth with ChangeNotifier{
     return true;
   }
 
- 
+  Future<void> logout() async {
+    _token        = null;
+    _userId       = null;
+    _expiredToken = null;
+
+    if(_timer != null){
+      _timer.cancel();
+      _timer = null;
+    }
+
+    notifyListeners();
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove('userData');
+
+  }
+
+ Future<void> _autoLogout(){
+   if(_timer != null){
+     _timer.cancel();
+   }
+
+   final timeExpired = _expiredToken.difference(DateTime.now()).inSeconds;
+   _timer = Timer(Duration(seconds: timeExpired), logout);
+ }
 }
