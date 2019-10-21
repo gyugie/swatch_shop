@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import './screens/splash_screen.dart';
-import './screens/product_overview_screen.dart';
+import './screens/overview_screen.dart';
 import './providers/auth.dart';
 import './screens/auth_screens.dart';
 
@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
             textTheme: TextTheme(
               headline: TextStyle(
                 fontSize: 50,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.bold, 
               ),
               title: TextStyle(
                 fontSize: 20,
@@ -37,11 +37,14 @@ class MyApp extends StatelessWidget {
               ),
             )
           ),
-          home: authData.isAuth ? ProductOverviewScreen() : FutureBuilder(
+          home: authData.isAuth ? OverviewScreen() : FutureBuilder(
             future: authData.tryToAutoLogin(),
             builder: (ctx, authSnapShot) => 
               authSnapShot.connectionState == ConnectionState.waiting ? SplashScreen() : AuthScreen(),
           ),
+          routes: {
+           
+          },
         ),
       ),
     );
