@@ -53,11 +53,11 @@ class _AuthCardState extends State<AuthCard> {
     _formKey.currentState.save();
     setState(() {
       _isLoading = true;
-    });
-
+    }); 
+    
     try{
       if(_authMode == AuthMode.Login){
-         await Provider.of<Auth>(context).signUp(_authData['email'], _authData['password']);
+         await Provider.of<Auth>(context).login(_authData['email'], _authData['password']);
       } else {
          await Provider.of<Auth>(context).signUp(_authData['email'], _authData['password']);
 
@@ -100,7 +100,7 @@ class _AuthCardState extends State<AuthCard> {
         _authMode = AuthMode.Login;
       });
     }
-    print(_authMode);
+   
   }
 
   @override

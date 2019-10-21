@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import './screens/product_overview_screen.dart';
 import './providers/auth.dart';
 import './screens/auth_screens.dart';
 
@@ -14,28 +15,30 @@ class MyApp extends StatelessWidget {
           value: Auth()
         )
       ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Swatch Shop',
-        theme: ThemeData(
-          primaryColor: Colors.yellow[50],
-          accentColor: Colors.grey.withOpacity(0.1),
-          textTheme: TextTheme(
-            headline: TextStyle(
-              fontSize: 50,
-              fontWeight: FontWeight.bold,
-            ),
-            title: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-            body1: TextStyle(
-              fontSize: 12,
-            ),
-          )
+      child: Consumer<Auth>(
+        builder: (ctx, authData, child) => MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Swatch Shop',
+          theme: ThemeData(
+            primaryColor: Colors.yellow[50],
+            accentColor: Colors.grey.withOpacity(0.1),
+            textTheme: TextTheme(
+              headline: TextStyle(
+                fontSize: 50,
+                fontWeight: FontWeight.bold,
+              ),
+              title: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+              body1: TextStyle(
+                fontSize: 12,
+              ),
+            )
+          ),
+          home: authData.isAuth ? ProductOverviewScreen() : AuthScreen(),
         ),
-        home: AuthScreen(),
-    ),
+      ),
     );
   }
 }
