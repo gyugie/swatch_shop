@@ -6,7 +6,7 @@ class Product with ChangeNotifier {
   final String product_name;
   final String product_descriptiom;
   final double product_price;
-  final String product_image;
+  final List product_image;
   final List product_features;
   final List product_dimension;
   final String product_category;

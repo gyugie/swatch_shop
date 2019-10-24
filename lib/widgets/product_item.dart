@@ -19,10 +19,10 @@ class ProductItem extends StatelessWidget {
                 children: <Widget>[
                   AspectRatio(
                     aspectRatio: 18.0 / 11.0,
-                    child: Image.network(product.product_image),
+                    child: Image.network(product.product_image[1], fit: BoxFit.fitHeight),
                   ),
                   Padding(
-                    padding: EdgeInsets.fromLTRB(16.0, 20.0, 16.0, 8.0),
+                    padding: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 8.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
