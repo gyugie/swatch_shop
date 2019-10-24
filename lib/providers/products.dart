@@ -64,7 +64,7 @@ class Products with ChangeNotifier{
       product_category: 'men',
     ),
       Product(
-      product_id: '2',
+      product_id: '3',
       product_name: 'Stainless Steel mesh strap',
       product_descriptiom: 'WORLD CLASS MANUFACTURING Powering this elegant timepiece is the Swiss Made Ronda Cal. 785. Fitted with a domed sapphire crystal, the second hardest mineral on earth next to diamond. Encased in surgical grade stainless steel with 100m water resistance. Paired with a stainless steel mesh strap - one size fits all.',
       product_price:25.00,
@@ -93,7 +93,7 @@ class Products with ChangeNotifier{
       product_category: 'women',
     ),
       Product(
-      product_id: '2',
+      product_id: '4',
       product_name: 'Stainless Steel mesh strap',
       product_descriptiom: 'WORLD CLASS MANUFACTURING Powering this elegant timepiece is the Swiss Made Ronda Cal. 785. Fitted with a domed sapphire crystal, the second hardest mineral on earth next to diamond. Encased in surgical grade stainless steel with 100m water resistance. Paired with a stainless steel mesh strap - one size fits all.',
       product_price:25.00,
@@ -122,7 +122,7 @@ class Products with ChangeNotifier{
       product_category: 'women',
     ),
       Product(
-      product_id: '2',
+      product_id: '5',
       product_name: 'Stainless Steel mesh strap',
       product_descriptiom: 'WORLD CLASS MANUFACTURING Powering this elegant timepiece is the Swiss Made Ronda Cal. 785. Fitted with a domed sapphire crystal, the second hardest mineral on earth next to diamond. Encased in surgical grade stainless steel with 100m water resistance. Paired with a stainless steel mesh strap - one size fits all.',
       product_price:25.00,
@@ -159,5 +159,9 @@ class Products with ChangeNotifier{
 
   List<Product> orderByCategory(String category){
     return _items.where( (prod) => prod.product_category == category ).toList();
+  }
+
+  Product getProductById(String id){
+    return _items.firstWhere( (prod) => prod.product_id == id );
   }
 }
