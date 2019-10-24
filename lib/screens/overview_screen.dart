@@ -46,7 +46,6 @@ class _OverviewScreenState extends State<OverviewScreen> {
   Widget bodyContainer() {
     var _page;
     Color selectedColor = tabItems[selectedPos].circleColor;
-    String slogan;
     switch (selectedPos) {
       case 0:
         _page = HomeScreen();
@@ -76,7 +75,7 @@ class _OverviewScreenState extends State<OverviewScreen> {
       barHeight: bottomNavBarHeight,
       barBackgroundColor: Colors.amber,
       animationDuration: Duration(milliseconds: 800),
-      selectedIconColor: Colors.blueGrey,
+      selectedIconColor: Colors.cyan[900],
       normalIconColor: Colors.white,
       circleStrokeWidth: 3,
       selectedCallback: (int selectedPos) {
