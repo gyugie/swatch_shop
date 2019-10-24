@@ -9,6 +9,7 @@ class Product with ChangeNotifier {
   final String product_image;
   final List product_features;
   final List product_dimension;
+  final String product_category;
   final String creator_id;
   bool isFavorites;
 
@@ -20,6 +21,7 @@ class Product with ChangeNotifier {
     @required this.product_image,
     @required this.product_features,
     @required this.product_dimension,
+    @required this.product_category,
     @required this.creator_id,
     this.isFavorites = false
   });

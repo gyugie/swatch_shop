@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import './providers/products.dart';
 import './screens/splash_screen.dart';
 import './screens/overview_screen.dart';
 import './providers/auth.dart';
@@ -14,6 +15,9 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider.value(
           value: Auth()
+        ),
+        ChangeNotifierProvider.value(
+          value: Products()
         )
       ],
       child: Consumer<Auth>(

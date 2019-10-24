@@ -9,6 +9,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen>  with SingleTickerProviderStateMixin {
   TabController _controller;
+  var _categories   = 'men';
+  
 
   @override
   void initState() {
@@ -16,6 +18,20 @@ class _HomeScreenState extends State<HomeScreen>  with SingleTickerProviderState
     _controller = new TabController(length: 3, vsync: this);
   }
 
+  void _setCatgories(int index){
+    var value = '';
+    if(index == 0 ){
+        value = 'men';
+    } else if (index == 1){
+        value = 'women';
+    } else {
+        value = 'sliper';
+    }
+
+    setState(() {
+      _categories = value;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,6 +78,11 @@ class _HomeScreenState extends State<HomeScreen>  with SingleTickerProviderState
                 decoration:  BoxDecoration(color: Colors.white),
                 child:  TabBar(
                   controller: _controller,
+                  onTap: (index){
+                  
+                    _setCatgories(index);
+
+                  },
                   indicatorColor: Colors.grey,
                   tabs: [
                     Tab(
@@ -85,126 +106,15 @@ class _HomeScreenState extends State<HomeScreen>  with SingleTickerProviderState
                 controller: _controller,
                 children: <Widget>[
                   Container(
-                      child: ProductGrid()
+                      child: ProductGrid(_categories)
+                  ),
+                   Container(
+                      child: ProductGrid(_categories)
                   ),
                   Container(
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: <Widget>[
-                                Card(
-                              child: ListTile(
-                                leading: const Icon(Icons.location_on),
-                                title:  Text('Latitude: 48.09342\nLongitude: 11.23403'),
-                                trailing:  IconButton(icon: const Icon(Icons.my_location), onPressed: () {}),
-                              ),
-                            ),
-                              Card(
-                              child: ListTile(
-                                leading: const Icon(Icons.location_on),
-                                title:  Text('Latitude: 48.09342\nLongitude: 11.23403'),
-                                trailing:  IconButton(icon: const Icon(Icons.my_location), onPressed: () {}),
-                              ),
-                            ),
-                            Card(
-                              child: ListTile(
-                                leading: const Icon(Icons.location_on),
-                                title:  Text('Latitude: 48.09342\nLongitude: 11.23403'),
-                                trailing:  IconButton(icon: const Icon(Icons.my_location), onPressed: () {}),
-                              ),
-                            ),
-                              Card(
-                              child: ListTile(
-                                leading: const Icon(Icons.location_on),
-                                title:  Text('Latitude: 48.09342\nLongitude: 11.23403'),
-                                trailing:  IconButton(icon: const Icon(Icons.my_location), onPressed: () {}),
-                              ),
-                            ),
-                            Card(
-                              child: ListTile(
-                                leading: const Icon(Icons.location_on),
-                                title:  Text('Latitude: 48.09342\nLongitude: 11.23403'),
-                                trailing:  IconButton(icon: const Icon(Icons.my_location), onPressed: () {}),
-                              ),
-                            ),
-                              Card(
-                              child: ListTile(
-                                leading: const Icon(Icons.location_on),
-                                title:  Text('Latitude: 48.09342\nLongitude: 11.23403'),
-                                trailing:  IconButton(icon: const Icon(Icons.my_location), onPressed: () {}),
-                              ),
-                            ),
-                            Card(
-                              child: ListTile(
-                                leading: const Icon(Icons.location_on),
-                                title:  Text('Latitude: 48.09342\nLongitude: 11.23403'),
-                                trailing:  IconButton(icon: const Icon(Icons.my_location), onPressed: () {}),
-                              ),
-                            ),
-                              Card(
-                              child: ListTile(
-                                leading: const Icon(Icons.location_on),
-                                title:  Text('Latitude: 48.09342\nLongitude: 11.23403'),
-                                trailing:  IconButton(icon: const Icon(Icons.my_location), onPressed: () {}),
-                              ),
-                            ),
-                              SizedBox(
-                                height: 20,
-                              )
-                          ],
-                        ),
-                      ),
+                      child: ProductGrid(_categories)
                   ),
-                  Container(
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: <Widget>[
-                              ListTile(
-                                leading: const Icon(Icons.location_on),
-                                title:  Text('Latitude: 48.09342\nLongitude: 11.23403'),
-                                trailing:  IconButton(icon: const Icon(Icons.my_location), onPressed: () {}),
-                              ),
-                              ListTile(
-                                leading: const Icon(Icons.location_on),
-                                title:  Text('Latitude: 48.09342\nLongitude: 11.23403'),
-                                trailing:  IconButton(icon: const Icon(Icons.my_location), onPressed: () {}),
-                              ),
-                              ListTile(
-                                leading: const Icon(Icons.location_on),
-                                title:  Text('Latitude: 48.09342\nLongitude: 11.23403'),
-                                trailing:  IconButton(icon: const Icon(Icons.my_location), onPressed: () {}),
-                              ),
-                              ListTile(
-                                leading: const Icon(Icons.location_on),
-                                title:  Text('Latitude: 48.09342\nLongitude: 11.23403'),
-                                trailing:  IconButton(icon: const Icon(Icons.my_location), onPressed: () {}),
-                              ),
-                              ListTile(
-                                leading: const Icon(Icons.location_on),
-                                title:  Text('Latitude: 48.09342\nLongitude: 11.23403'),
-                                trailing:  IconButton(icon: const Icon(Icons.my_location), onPressed: () {}),
-                              ),
-                              ListTile(
-                                leading: const Icon(Icons.location_on),
-                                title:  Text('Latitude: 48.09342\nLongitude: 11.23403'),
-                                trailing:  IconButton(icon: const Icon(Icons.my_location), onPressed: () {}),
-                              ),
-                              ListTile(
-                                leading: const Icon(Icons.location_on),
-                                title:  Text('Latitude: 48.09342\nLongitude: 11.23403'),
-                                trailing:  IconButton(icon: const Icon(Icons.my_location), onPressed: () {}),
-                              ),
-                              ListTile(
-                                leading: const Icon(Icons.location_on),
-                                title:  Text('Latitude: 48.09342\nLongitude: 11.23403'),
-                                trailing:  IconButton(icon: const Icon(Icons.my_location), onPressed: () {}),
-                              ),
-                              SizedBox(
-                                height: 20,
-                              )
-                          ],
-                        ),
-                      ),
-                  ),
+                 
                 ],
               ),
             ),

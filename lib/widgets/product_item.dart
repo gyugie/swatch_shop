@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../providers/product.dart';
 
 class ProductItem extends StatelessWidget {
-  final String id;
-  final String product_name;
-  final double product_price;
-  final String product_image;
 
-  ProductItem(this.id, this.product_name, this.product_price, this.product_image);
-  
   @override
   Widget build(BuildContext context) {
+    final product = Provider.of<Product>(context, listen: false);
      return Container(
        padding: EdgeInsets.all(2),
         child: new Stack(
@@ -22,16 +19,16 @@ class ProductItem extends StatelessWidget {
                 children: <Widget>[
                   AspectRatio(
                     aspectRatio: 18.0 / 11.0,
-                    child: Image.network(product_image),
+                    child: Image.network(product.product_image),
                   ),
                   Padding(
                     padding: EdgeInsets.fromLTRB(16.0, 20.0, 16.0, 8.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text(product_name, style: Theme.of(context).textTheme.title),
+                        Text('${product.product_name}', style: Theme.of(context).textTheme.title),
                         SizedBox(height: 8.0),
-                        Text('\$ ${product_price}', style: Theme.of(context).textTheme.title),
+                        Text('\$ ${product.product_price}', style: Theme.of(context).textTheme.title),
                       ],
                     ),
                   ),
