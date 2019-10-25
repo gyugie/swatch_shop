@@ -11,8 +11,9 @@ class ProductDetailScreen extends StatefulWidget {
 
 class _ProductDetailScreenState extends State<ProductDetailScreen>  with SingleTickerProviderStateMixin {
   TabController _controller;
+  int _selectedIndex = 0;
 
-    @override
+  @override
   void initState() {
     super.initState();
     _controller = new TabController(length: 2, vsync: this);
@@ -26,10 +27,24 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>  with SingleT
     
     return Scaffold(
       backgroundColor: Colors.grey[50],
-      body: Container(
-        child: CustomScrollView(
+      body: new CustomScrollView(
           slivers: <Widget>[
             SliverAppBar(
+              floating: false,
+              pinned: true,
+              snap: false,
+              backgroundColor: Colors.transparent,
+              actions: <Widget>[
+                Container(
+                  padding: EdgeInsets.only(right: 15),
+                  child: GestureDetector(
+                    child: Icon(Icons.shopping_cart),
+                    onTap: (){
+                      print('object');
+                    },
+                  ),
+                ),
+              ],
               expandedHeight: deviceSize.height * 0.3,
               flexibleSpace: FlexibleSpaceBar(
                 background: Hero(
@@ -116,7 +131,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>  with SingleT
                     ),
                   ),
                 ),
-                //spesification
+                //specification
                 Container(
                   height: 50,
                   decoration:  BoxDecoration(color: Colors.white),
@@ -133,7 +148,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>  with SingleT
                   ),
                 ),
                 Container(
-                  height: deviceSize.height * 0.40,
+                  height: deviceSize.height * 0.35,
                   child: TabBarView(
                     controller: _controller,
                     children: <Widget>[
@@ -142,11 +157,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>  with SingleT
                           child: Column(
                             children: <Widget>[
                               SizedBox(height: 20),
-                              spesification('Case 40', '${product.product_dimension[0]['case_40']}'),
+                              _spesification('Case 40', '${product.product_dimension[0]['case_40']}'),
                               Divider(),
-                              spesification('Case 30', '${product.product_dimension[0]['case_30']}'),
+                              _spesification('Case 30', '${product.product_dimension[0]['case_30']}'),
                               Divider(),
-                              spesification('Strap', '${product.product_dimension[0]['strap']}'),
+                              _spesification('Strap', '${product.product_dimension[0]['strap']}'),
                             ],
                           ),
                         ),
@@ -156,15 +171,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>  with SingleT
                           child: Column(
                             children: <Widget>[
                               SizedBox(height: 20),
-                              spesification('Glass', '${product.product_features[0]['glass']}'),
+                              _spesification('Glass', '${product.product_features[0]['glass']}'),
                               Divider(),
-                              spesification('Case', '${product.product_features[0]['case']}'),
+                              _spesification('Case', '${product.product_features[0]['case']}'),
                               Divider(),
-                              spesification('Movement', '${product.product_features[0]['movement']}'),
+                              _spesification('Movement', '${product.product_features[0]['movement']}'),
                               Divider(),
-                              spesification('Water Resistance', '${product.product_features[0]['water_resistance']}'),
+                              _spesification('Water Resistance', '${product.product_features[0]['water_resistance']}'),
                               Divider(),
-                              spesification('Strap', '${product.product_features[0]['strap']}'),
+                              _spesification('Strap', '${product.product_features[0]['strap']}'),
                             ],
                           ),
                         ),
@@ -172,37 +187,51 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>  with SingleT
                     ],
                   ),
                 ),
-                SizedBox(height: 80)
+                SizedBox(height: 70),
 
               ]),
             ),
           ],
         ),
-      )
+      floatingActionButton: Container(
+        width: deviceSize.width * 0.8,
+        child: FloatingActionButton.extended(
+          icon: Icon(Icons.shopping_cart, color: Colors.white),
+          label: const Text('Add to cart', style: TextStyle(color: Colors.white)),
+          backgroundColor: Colors.black,
+          heroTag: null,
+          onPressed: (){
+
+          },
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
-    Widget spesification(String title, String description){
-      final deviceSize  = MediaQuery.of(context).size;
-      return Container(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.only(left: 5),
-              width: deviceSize.width * 0.15,
-              child: Text('${title}', style: TextStyle(fontSize: 14, color: Colors.grey)),
-            ),
-            Container(
-              width: deviceSize.width * 0.05,
-              child: Text(':', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
-            ),
-            Container(
-              width: deviceSize.width * 0.70,
-              child: Text('${description}', style: TextStyle(fontSize: 14)),
-            )
-          ],
-        ),
-      );
-    }
+  //widget specification 
+  Widget _spesification(String title, String description){
+    final deviceSize  = MediaQuery.of(context).size;
+    return Container(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.only(left: 5),
+            width: deviceSize.width * 0.2,
+            child: Text('${title}', style: TextStyle(fontSize: 14, color: Colors.grey)),
+          ),
+          Container(
+            width: deviceSize.width * 0.05,
+            child: Text(':', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+          ),
+          Container(
+            width: deviceSize.width * 0.70,
+            child: Text('${description}', style: TextStyle(fontSize: 14)),
+          )
+        ],
+      ),
+    );
+  }
+
 }
