@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_pro/carousel_pro.dart';
-import 'package:swatch_shop/widgets/product_grid.dart';
+import 'package:provider/provider.dart';
+import 'package:swatch_shop/widgets/badge.dart';
+import '../widgets/product_grid.dart';
+import '../providers/cart.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -37,6 +40,25 @@ class _HomeScreenState extends State<HomeScreen>  with SingleTickerProviderState
   Widget build(BuildContext context) {
   final deviceSize = MediaQuery.of(context).size; 
    return Scaffold(
+     appBar: AppBar(
+       title: Text('Featured'),
+       backgroundColor: Colors.white,
+        actions: <Widget>[
+          Consumer<Cart>(
+            builder: (_, cart, ch) => Badge(
+              child: ch,
+              value: cart.cartCount.toString(),
+            ),
+            child: IconButton(
+              icon: Icon(Icons.shopping_cart, color: Colors.black),
+              onPressed: (){
+
+              },
+            )
+
+          )
+        ],
+      ),
       body: Container(
         child: Column(
           children: <Widget>[
@@ -100,7 +122,7 @@ class _HomeScreenState extends State<HomeScreen>  with SingleTickerProviderState
             
             // tab bar
             Container(
-              height: deviceSize.height * 0.60,
+              height: deviceSize.height * 0.48,
               padding: EdgeInsets.all(5),
               child:  TabBarView(
                 controller: _controller,

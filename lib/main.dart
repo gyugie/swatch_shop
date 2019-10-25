@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import './providers/cart.dart';
 import './screens/product_detail_screen.dart';
 import './providers/products.dart';
 import './screens/splash_screen.dart';
@@ -19,6 +20,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider.value(
           value: Products()
+        ),
+         ChangeNotifierProvider.value(
+          value: Cart()
         )
       ],
       child: Consumer<Auth>(
