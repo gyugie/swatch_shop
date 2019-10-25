@@ -1,43 +1,38 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
+import '../screens/overview_screen.dart';
 
-class SplashScreen extends StatelessWidget {
+class SplashScreen extends StatefulWidget {
+  @override
+  _SplashScreenState createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState(){
+    super.initState();
+    startSplashScreen();
+  }
+
+  startSplashScreen() async {
+    var duration = Duration(seconds: 5);
+    return Timer(duration, () {
+        return true;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final deviceSize = MediaQuery.of(context).size;
-
     return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor
-            ),
-          ),
-          SingleChildScrollView(
-            child: Container(
-              height: deviceSize.height,
-              width: deviceSize.width,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                 Flexible(
-                   child:  Container(
-                    padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 30.0),
-                    margin: EdgeInsets.only(bottom: 50),
-                    child: Text(
-                      'Hi There, Welcome...',
-                      style: Theme.of(context).textTheme.headline,
-                      softWrap: true,
-                    ),
-                  ),
-                 ),
-                ],
+      body: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage('assets/images/splash.jpg'),
+                fit: BoxFit.cover,
               ),
             ),
-          )
-        ],
-      ),  
+          child: null,
+      )
     );
   }
 }
