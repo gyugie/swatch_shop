@@ -1,37 +1,46 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../providers/cart.dart';
 
 class ItemCart extends StatelessWidget {
-  // final String productId;
-  // final String productName;
-  // final String productImage;
-  // final double productPrice;
+  final String id;
+  final String productId;
+  final String productName;
+  final String productImage;
+  final double productPrice;
+  final int quantity;
 
-  // ItemCart(this.productId, this.productName, this.productImage, this.productPrice);
+  ItemCart(this.id, this.productId, this.productName, this.productImage, this.productPrice, this.quantity);
   @override
   Widget build(BuildContext context) {
+    final cart = Provider.of<Cart>(context, listen: false);
     return Card(
       child:  ListTile(
-        leading: Image.network('https://s3.amazonaws.com/brathwait-com/transformed/02c686d5d4/photos/152755435/xl/42cde5b04a6a6e704cc3_85eb83ecd914a01fda67b892449096e1.jpg'),
-        title: Text('item.name'),
-        subtitle: Text('Price: 12 zł'),
+        leading: Image.network(productImage),
+        title: Text(productName),
+        subtitle: Text(' Rp. ${productPrice * quantity}'),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             IconButton(
               icon: Icon(Icons.remove),
-              onPressed: (){},
+              onPressed: (){
+                cart.removingSingleItem(productId);
+              },
             ),
             Container(
               width: 50,
               height: 50,
               color: Colors.yellow[200],
               child: Center(
-                child: Text('12'),
+                child: Text('${quantity}'),
               ),
             ),
             IconButton(
               icon: Icon(Icons.add),
-              onPressed: (){},
+              onPressed: (){
+                cart.addItem(productId, null, null, null);
+              },
             ),
           ],
         ),

@@ -38,18 +38,18 @@ class _CartScreenState extends State<CartScreen> {
     final deviceSice  = MediaQuery.of(context).size;
     final cart        = Provider.of<Cart>(context);
     final totalCart   = cart.cartCount;
-    switch (3){
+    switch (totalCart){
       case 0:
         _height = 0.0;
         break;
       case 1:
-        _height = 0.1;
+        _height = 0.12;
         break;
       case 2:
-        _height = 0.15;
+        _height = 0.22;
         break;
       case 3:
-        _height = 0.2;
+        _height = 0.32;
         break;
 
       default:
@@ -66,7 +66,7 @@ class _CartScreenState extends State<CartScreen> {
           child: Column(
             children: <Widget>[
               //for list cart
-              totalCart == 0 ? 
+              totalCart != 0 ? 
               Container(
                 height: deviceSice.height * _height,
                 child: CartList(),
