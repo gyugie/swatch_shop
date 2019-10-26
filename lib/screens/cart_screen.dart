@@ -34,9 +34,27 @@ class _CartScreenState extends State<CartScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double  _height;
     final deviceSice  = MediaQuery.of(context).size;
     final cart        = Provider.of<Cart>(context);
-    print(cart.cartCount);
+    switch (5){
+      case 0:
+        _height = 0.1;
+        break;
+      case 1:
+        _height = 0.1;
+        break;
+      case 2:
+        _height = 0.15;
+        break;
+      case 3:
+        _height = 0.2;
+        break;
+
+      default:
+        _height = 0.45;
+    }
+
     return Scaffold(
         appBar: AppBar(
           title: Text('Your Cart', style: TextStyle(color: Colors.white)),
@@ -48,7 +66,7 @@ class _CartScreenState extends State<CartScreen> {
             children: <Widget>[
               //for list cart
               Container(
-                height: deviceSice.height * 0.45,
+                height: deviceSice.height * _height,
                 child: CartList(),
               ),
               SizedBox(height: 10),
