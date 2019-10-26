@@ -11,7 +11,7 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
-  int _courierValue = 12000;
+  double _courierValue = 12.000;
   int _courierType = 0;
   
   void _handleRadioCourierValue(int value) {
@@ -20,13 +20,13 @@ class _CartScreenState extends State<CartScreen> {
   
       switch (_courierType) {
         case 0:
-          _courierValue = 12000;
+          _courierValue = 12.000;
           break;
         case 1:
-          _courierValue = 14000;
+          _courierValue = 14.000;
           break;
         case 2:
-          _courierValue = 15000;
+          _courierValue = 15.000;
           break;
       }
     });
@@ -197,7 +197,7 @@ class _CartScreenState extends State<CartScreen> {
                       Container(
                         padding: EdgeInsets.all(10),
                         alignment: Alignment.centerLeft,
-                        child: Text('asdasdadsasd\n asdasd', style: TextStyle(fontSize: 14)),
+                        child: Text('Soon...!', style: TextStyle(fontSize: 14)),
                       )
 
                     ],
@@ -233,14 +233,14 @@ class _CartScreenState extends State<CartScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 Text('Sub Total', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey)),
-                                Text('\$ 1000.00', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey)),
+                                Text('Rp. ${cart.subTotal}', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey)),
                               ],
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 Text('Total', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey)),
-                                Text('\$ 1100.00', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey)),
+                                Text('Rp. ${totalCart != 0 ? cart.subTotal + _courierValue : 0}', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey)),
                               ],
                             )
 

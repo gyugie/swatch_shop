@@ -39,7 +39,7 @@ class ItemCart extends StatelessWidget {
             IconButton(
               icon: Icon(Icons.add),
               onPressed: (){
-                cart.addItem(productId, null, null, null);
+                cart.addItem(id, null, null, null);
               },
             ),
           ],

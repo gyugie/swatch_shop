@@ -6,7 +6,7 @@ import '../widgets/cart_item.dart';
 class CartList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final cartItem  = Provider.of<Cart>(context, listen: false).cart;
+    final cartItem  = Provider.of<Cart>(context).cart;
     return ListView.builder(
         itemCount: cartItem.length,
         itemBuilder: (ctx, index) => ItemCart(

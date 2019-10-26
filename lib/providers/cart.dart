@@ -25,6 +25,15 @@ class Cart with ChangeNotifier{
     return _carts.length;
   }
 
+  double get subTotal {
+    var total = 0.0;
+    _carts.forEach((key, cartItem){
+      total += cartItem.product_price * cartItem.quantity;
+    });
+
+    return total;
+  }
+
   void addItem(String productId, String productName, List productImage, double productPrice){
     if( _carts.containsKey(productId) ){
     //update cart
@@ -37,19 +46,18 @@ class Cart with ChangeNotifier{
               product_image: existingCart.product_image, 
               quantity: existingCart.quantity + 1
       ));
-
     } else {
       _carts.putIfAbsent(
         productId, () => CartItem(
-              product_id: DateTime.now().toString(), 
+              product_id: productId, 
               product_name: productName, 
               product_price: productPrice,  
               product_image: productImage, 
               quantity: 1
         ));
     }
-
     notifyListeners();
+
   }
 
   void removingSingleItem(String productId){
