@@ -11,22 +11,22 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
-  double _result = 0.0;
-  int _radioValue = 0;
+  int _courierValue = 12000;
+  int _courierType = 0;
   
-  void _handleRadioValueChange(int value) {
+  void _handleRadioCourierValue(int value) {
     setState(() {
-      _radioValue = value;
+      _courierType = value;
   
-      switch (_radioValue) {
+      switch (_courierType) {
         case 0:
-          _result = 1.1;
+          _courierValue = 12000;
           break;
         case 1:
-          _result = 1.2;
+          _courierValue = 14000;
           break;
         case 2:
-          _result = 1.3;
+          _courierValue = 15000;
           break;
       }
     });
@@ -76,8 +76,8 @@ class _CartScreenState extends State<CartScreen> {
                 padding: EdgeInsets.only(top: 20),
                 child: Text('Cart is empty...!', style:  TextStyle(fontSize: 16, fontWeight: FontWeight.bold)), 
               ),
-              SizedBox(height: 10),
               //for courier
+              SizedBox(height: 10),
               Container(
                 child: Card(
                   child: Column(
@@ -97,12 +97,26 @@ class _CartScreenState extends State<CartScreen> {
                              Row(
                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                children: <Widget>[
-                                  Text('JNE (Regular - 12.000)', style: TextStyle(fontSize: 14)),
+                                  Row(
+                                    children: <Widget>[
+                                      Image.asset('assets/images/J&T.png', width: 50),
+                                      SizedBox(width: 10),
+                                      RichText(
+                                        text: TextSpan(
+                                          text: 'JNE REG ',
+                                          style: TextStyle(fontSize: 14, color: Colors.black),
+                                          children: <TextSpan>[
+                                            TextSpan(text: '\nRp. 12.000 (3 Hari Kerja)', style: TextStyle(color: Colors.grey)),
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                   Radio(
                                     value: 0,
                                     activeColor: Colors.amber,
-                                    groupValue: _radioValue,
-                                    onChanged: _handleRadioValueChange,
+                                    groupValue: _courierType,
+                                    onChanged: _handleRadioCourierValue,
                                   ),
                              
                                ],
@@ -110,12 +124,26 @@ class _CartScreenState extends State<CartScreen> {
                              Row(
                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                children: <Widget>[
-                                  Text('SiCepat (Regular - 11.500)', style: TextStyle(fontSize: 14)),
+                                  Row(
+                                    children: <Widget>[
+                                      Image.asset('assets/images/JNE.png', width: 50),
+                                      SizedBox(width: 10),
+                                      RichText(
+                                        text: TextSpan(
+                                          text: 'J&T REG ',
+                                          style: TextStyle(fontSize: 14, color: Colors.black),
+                                          children: <TextSpan>[
+                                            TextSpan(text: '\nRp. 14.000 (2 Hari Kerja)', style: TextStyle(color: Colors.grey)),
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                   Radio(
                                     value: 1,
                                     activeColor: Colors.amber,
-                                    groupValue: _radioValue,
-                                    onChanged: _handleRadioValueChange,
+                                    groupValue: _courierType,
+                                    onChanged: _handleRadioCourierValue,
                                   ),
                              
                                ],
@@ -123,12 +151,26 @@ class _CartScreenState extends State<CartScreen> {
                              Row(
                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                children: <Widget>[
-                                  Text('J&T (Regular - 11.000)', style: TextStyle(fontSize: 14)),
+                                  Row(
+                                    children: <Widget>[
+                                      Image.asset('assets/images/SiCepat.png', width: 50),
+                                      SizedBox(width: 10),
+                                      RichText(
+                                        text: TextSpan(
+                                          text: 'SiCepat',
+                                          style: TextStyle(fontSize: 14, color: Colors.black),
+                                          children: <TextSpan>[
+                                            TextSpan(text: '\nRp. 15.000 (1 Hari Kerja)', style: TextStyle(color: Colors.grey)),
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                   Radio(
                                     value: 2,
                                     activeColor: Colors.amber,
-                                    groupValue: _radioValue,
-                                    onChanged: _handleRadioValueChange,
+                                    groupValue: _courierType,
+                                    onChanged: _handleRadioCourierValue,
                                   ),
                              
                                ],
@@ -184,7 +226,7 @@ class _CartScreenState extends State<CartScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 Text('Shipping', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey)),
-                                Text('\$ 100.00', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey)),
+                                Text('Rp. ${_courierValue}', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey)),
                               ],
                             ),
                             Row(
