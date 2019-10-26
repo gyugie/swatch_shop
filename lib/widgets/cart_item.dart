@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 
 class ItemCart extends StatelessWidget {
+  // final String productId;
+  // final String productName;
+  // final String productImage;
+  // final double productPrice;
+
+  // ItemCart(this.productId, this.productName, this.productImage, this.productPrice);
   @override
   Widget build(BuildContext context) {
     return Card(

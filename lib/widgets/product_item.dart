@@ -9,6 +9,7 @@ class ProductItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final product = Provider.of<Product>(context, listen: false);
+    final cart    = Provider.of<Cart>(context, listen: false);
      return Container(
        padding: EdgeInsets.all(2),
         child: Hero(
@@ -45,12 +46,32 @@ class ProductItem extends StatelessWidget {
                               GestureDetector(
                                 child: Icon(Icons.shopping_cart, color: Colors.grey, size: 22),
                                 onTap: (){
-                                  Provider.of<Cart>(context).addItem(
+                                  //adding product to cart
+                                  cart.addItem(
                                     product.product_id, 
                                     product.product_name, 
                                     product.product_image, 
                                     product.product_price
                                     );
+
+                                  //for notif added cart item
+                                  Scaffold.of(context).hideCurrentSnackBar();
+                                  Scaffold.of(context).showSnackBar(SnackBar(
+                                    content: Text(
+                                      'Added Item to cart', 
+                                      style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),
+                                      textAlign: TextAlign.center
+                                    ),
+                                    duration: Duration(seconds: 2),
+                                    backgroundColor: Colors.amber[50],
+                                    action: SnackBarAction(
+                                      label: 'Undo',
+                                      textColor: Colors.red,
+                                      onPressed: (){
+                                        cart.removingSingleItem(product.product_id);
+                                      },
+                                    ),
+                                  ));
                                 },
                               )
                             ],

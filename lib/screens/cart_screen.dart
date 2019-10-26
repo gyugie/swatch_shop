@@ -37,9 +37,10 @@ class _CartScreenState extends State<CartScreen> {
     double  _height;
     final deviceSice  = MediaQuery.of(context).size;
     final cart        = Provider.of<Cart>(context);
-    switch (5){
+    final totalCart   = cart.cartCount;
+    switch (3){
       case 0:
-        _height = 0.1;
+        _height = 0.0;
         break;
       case 1:
         _height = 0.1;
@@ -65,9 +66,15 @@ class _CartScreenState extends State<CartScreen> {
           child: Column(
             children: <Widget>[
               //for list cart
+              totalCart == 0 ? 
               Container(
                 height: deviceSice.height * _height,
                 child: CartList(),
+              )
+              :
+              Container(
+                padding: EdgeInsets.only(top: 20),
+                child: Text('Cart is empty...!', style:  TextStyle(fontSize: 16, fontWeight: FontWeight.bold)), 
               ),
               SizedBox(height: 10),
               //for courier
@@ -211,7 +218,7 @@ class _CartScreenState extends State<CartScreen> {
                           borderRadius: new BorderRadius.circular(50.0),
                   ),
                   color: Colors.amber,
-                  onPressed: () {},
+                  onPressed: totalCart == 0 ? null : () {},
                   child: Text("Order", style: TextStyle(fontSize: 16)),
                 ),
               ),
