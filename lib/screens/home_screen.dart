@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:provider/provider.dart';
-import 'package:swatch_shop/widgets/badge.dart';
+import '../screens/cart_screen.dart';
+import '../widgets/badge.dart';
 import '../widgets/product_grid.dart';
 import '../providers/cart.dart';
 
@@ -50,9 +51,9 @@ class _HomeScreenState extends State<HomeScreen>  with SingleTickerProviderState
               value: cart.cartCount.toString(),
             ),
             child: IconButton(
-              icon: Icon(Icons.shopping_cart, color: Colors.black),
+              icon: Icon(Icons.shopping_cart, color: Colors.amber  ),
               onPressed: (){
-
+                Navigator.of(context).pushNamed(CartScreen.routeName);
               },
             )
 
