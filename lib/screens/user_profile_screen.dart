@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:swatch_shop/screens/favorite_screen.dart';
+import 'package:swatch_shop/widgets/edit_profile.dart';
 import '../widgets/badge.dart';
 import '../providers/cart.dart';
 import '../screens/cart_screen.dart';
@@ -113,7 +115,7 @@ class UserProfileScreen extends StatelessWidget {
                                             padding: EdgeInsets.all(0.0),
                                             icon: Icon(Icons.open_in_new, size: 18.0, color: Colors.grey),
                                             onPressed: (){
-                                              print('object');
+                                              Navigator.of(context).pushNamed(EditProfile.routeName);
                                             },
                                         )
                                       )
@@ -130,6 +132,8 @@ class UserProfileScreen extends StatelessWidget {
                                       _profileDetail(context, 'Full Name', 'Mugiono Arif S'),
                                       Divider(),
                                        _profileDetail(context, 'E-mail', 'mugypleci@gmail.com'),
+                                      Divider(),
+                                       _profileDetail(context, 'Phone', '0896528074'),
                                       Divider(),
                                        _profileDetail(context, 'Gender', 'Male'),
                                       Divider(),
@@ -148,57 +152,6 @@ class UserProfileScreen extends StatelessWidget {
                     ])
                   ],
                 )
-              ),
-              Container(
-                padding: EdgeInsets.only(right: 10, left: 10),
-                  child: Card(
-                    elevation: 3,
-                    child: ListTile(
-                    leading: CircleAvatar(
-                      child: Icon(Icons.favorite_border, color: Colors.grey, size: 30),
-                      backgroundColor: Colors.transparent,
-                    ),
-                    title: Text('Product Favorites'),
-                    subtitle: Text('Buy youre collected product'),
-                    onTap: (){
-
-                    },
-                  )
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.only(right: 10, left: 10),
-                  child: Card(
-                    elevation: 3,
-                    child: ListTile(
-                    leading: CircleAvatar(
-                      child: Icon(Icons.favorite_border, color: Colors.grey, size: 30),
-                      backgroundColor: Colors.transparent,
-                    ),
-                    title: Text('Product Favorites'),
-                    subtitle: Text('Buy youre collected product'),
-                    onTap: (){
-
-                    },
-                  )
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.only(right: 10, left: 10),
-                  child: Card(
-                    elevation: 3,
-                    child: ListTile(
-                    leading: CircleAvatar(
-                      child: Icon(Icons.favorite_border, color: Colors.grey, size: 30),
-                      backgroundColor: Colors.transparent,
-                    ),
-                    title: Text('Product Favorites'),
-                    subtitle: Text('Buy youre collected product'),
-                    onTap: (){
-
-                    },
-                  )
-                ),
               ),
               
             ]),
