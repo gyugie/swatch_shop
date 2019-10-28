@@ -44,21 +44,21 @@ class _HomeScreenState extends State<HomeScreen>  with SingleTickerProviderState
      appBar: AppBar(
        title: Text('Featured'),
        backgroundColor: Colors.white,
-        actions: <Widget>[
-          Consumer<Cart>(
-            builder: (_, cart, ch) => Badge(
-              child: ch,
-              value: cart.cartCount.toString(),
-            ),
-            child: IconButton(
-              icon: Icon(Icons.shopping_cart, color: Colors.amber  ),
-              onPressed: (){
-                Navigator.of(context).pushNamed(CartScreen.routeName);
-              },
-            )
-
+      actions: <Widget>[
+        Consumer<Cart>(
+          builder: (_, cart, ch) => Badge(
+            child: ch,
+            value: cart.cartCount.toString(),
+          ),
+          child: IconButton(
+            icon: Icon(Icons.shopping_cart, color: Colors.amber  ),
+            onPressed: (){
+              Navigator.of(context).pushNamed(CartScreen.routeName);
+            },
           )
-        ],
+
+        )
+      ],
       ),
       body: Container(
         child: Column(

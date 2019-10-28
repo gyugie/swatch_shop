@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
+import 'package:provider/provider.dart';
+import '../screens/auth_screens.dart';
 import '../screens/overview_screen.dart';
+import '../providers/auth.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -8,18 +10,6 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  @override
-  void initState(){
-    super.initState();
-    startSplashScreen();
-  }
-
-  startSplashScreen() async {
-    var duration = Duration(seconds: 5);
-    return Timer(duration, () {
-        return true;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {

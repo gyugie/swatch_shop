@@ -47,7 +47,7 @@ class _OverviewScreenState extends State<OverviewScreen> {
     var _page;
     Color selectedColor = tabItems[selectedPos].circleColor;
     switch (selectedPos) {
-      case 0:
+      case 3:
         _page = HomeScreen();
         break;
       case 1:
@@ -56,7 +56,7 @@ class _OverviewScreenState extends State<OverviewScreen> {
       case 2:
          _page = OrderScreen();
         break;
-      case 3:
+      case 0:
          _page = UserProfileScreen();
         break;
     }

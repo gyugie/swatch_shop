@@ -48,7 +48,7 @@ class MyApp extends StatelessWidget {
               ),
             )
           ),
-          home: 
+          home:
           authData.isAuth ? OverviewScreen() : FutureBuilder(
             future: authData.tryToAutoLogin(),
             builder: (ctx, authSnapShot) => 
