@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:carousel_pro/carousel_pro.dart';
+import '../widgets/badge.dart';
+import '../screens/cart_screen.dart';
 import '../providers/products.dart';
+import '../providers/cart.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   static const routeName = '/detail-product';
@@ -24,7 +27,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>  with SingleT
     final deviceSize  = MediaQuery.of(context).size;
     final productId   = ModalRoute.of(context).settings.arguments as String;
     final product     = Provider.of<Products>(context, listen: false).getProductById(productId);
-    
+    final cart        = Provider.of<Cart>(context, listen: false);
+
     return Scaffold(
       backgroundColor: Colors.grey[50],
       body: new CustomScrollView(
@@ -33,17 +37,21 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>  with SingleT
               floating: false,
               pinned: true,
               snap: false,
+               elevation: 0.0,
               backgroundColor: Colors.transparent,
               actions: <Widget>[
-                Container(
-                  padding: EdgeInsets.only(right: 15),
-                  child: GestureDetector(
-                    child: Icon(Icons.shopping_cart),
-                    onTap: (){
-                      print('object');
-                    },
+                Consumer<Cart>(
+                  builder: (_, cartData, ch) => Badge(
+                    child: ch,
+                    value: cartData.cartCount.toString(),
                   ),
-                ),
+                  child: IconButton(
+                    icon: Icon(Icons.shopping_cart, color: Colors.black),
+                    onPressed: (){
+                      Navigator.of(context).pushNamed(CartScreen.routeName);
+                    },
+                  )
+                )
               ],
               expandedHeight: deviceSize.height * 0.3,
               flexibleSpace: FlexibleSpaceBar(
@@ -193,17 +201,27 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>  with SingleT
             ),
           ],
         ),
-      floatingActionButton: Container(
-        width: deviceSize.width * 0.8,
-        child: FloatingActionButton.extended(
-          icon: Icon(Icons.shopping_cart, color: Colors.white),
-          label: const Text('Add to cart', style: TextStyle(color: Colors.white)),
-          backgroundColor: Colors.black,
-          heroTag: null,
-          onPressed: (){
-
-          },
-        ),
+      floatingActionButton: new Builder(
+        builder: (BuildContext context){
+          return new Container(
+                width: deviceSize.width * 0.8,
+                child: FloatingActionButton.extended(
+                  icon: Icon(Icons.shopping_cart, color: Colors.white),
+                  label: const Text('Add to cart', style: TextStyle(color: Colors.white)),
+                  backgroundColor: Colors.black,
+                  heroTag: null,
+                  onPressed: (){
+                    cart.addItem(product.product_id, product.product_name, product.product_image, product.product_price);
+                    Scaffold.of(context).hideCurrentSnackBar();
+                    Scaffold.of(context).showSnackBar(SnackBar(
+                      content: Text('Added Item To Cart', style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.center),
+                      backgroundColor: Colors.amber,
+                      duration: Duration(seconds: 2),
+                    ));
+                  },
+                ),
+              );
+        },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
