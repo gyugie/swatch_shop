@@ -1,9 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../providers/http_exception.dart';
+import '../providers/user.dart';
 
 class Auth with ChangeNotifier{
   String _token;
@@ -38,21 +41,28 @@ class Auth with ChangeNotifier{
         throw HttpException(responseData['error']['message']);
       } 
 
-      _token            = responseData['idToken'];
-      _expiredToken     = DateTime.now().add(Duration(seconds: int.parse(responseData['expiresIn'])));
-      _userId           = responseData['localId'];
-      notifyListeners();
-      _autoLogout();
+      //for signUp add process saving profil user
+      if(queryParams =='accounts:signUp'){
+        
+        _addNewUser(responseData['localId'], email, password, responseData['idToken']);
 
+      } else {
       //set session
-      final prefs     = await SharedPreferences.getInstance();
-      final userData  = json.encode({
-        'token' : _token,
-        'userId': _userId,
-        'expiredDate': _expiredToken.toIso8601String()
-      }); 
+        _token            = responseData['idToken'];
+        _expiredToken     = DateTime.now().add(Duration(seconds: int.parse(responseData['expiresIn'])));
+        _userId           = responseData['localId'];
+        notifyListeners();
+        _autoLogout();
+        
+        final prefs     = await SharedPreferences.getInstance();
+        final userData  = json.encode({
+          'token' : _token,
+          'userId': _userId,
+          'expiredDate': _expiredToken.toIso8601String()
+        }); 
 
-      prefs.setString('userData', userData);
+        prefs.setString('userData', userData);
+      }
 
     } catch (err){
       throw err;
@@ -108,5 +118,23 @@ class Auth with ChangeNotifier{
 
    final timeExpired = _expiredToken.difference(DateTime.now()).inSeconds;
    _timer = Timer(Duration(seconds: timeExpired), logout);
+ }
+
+ Future<void> _addNewUser(String userId, String userEmail, String userPassword, String token) async {
+   var url = 'https://swatch-shop.firebaseio.com/users.json?auth=$token';
+   try{
+     final response = await http.post(url, body: json.encode({
+       'userId': userId,
+       'email': userEmail,
+       'password': userPassword
+     })
+     );
+     
+     final responseData  = json.decode(response.body);
+     print(responseData);
+   } catch (err){
+
+   }
+   
  }
 }

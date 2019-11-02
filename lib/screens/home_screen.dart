@@ -5,6 +5,7 @@ import '../screens/cart_screen.dart';
 import '../widgets/badge.dart';
 import '../widgets/product_grid.dart';
 import '../providers/cart.dart';
+import '../providers/auth.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -45,20 +46,26 @@ class _HomeScreenState extends State<HomeScreen>  with SingleTickerProviderState
        title: Text('Featured'),
        backgroundColor: Colors.white,
       actions: <Widget>[
-        Consumer<Cart>(
-          builder: (_, cart, ch) => Badge(
-            child: ch,
-            value: cart.cartCount.toString(),
+          Consumer<Cart>(
+            builder: (_, cart, ch) => Badge(
+              child: ch,
+              value: cart.cartCount.toString(),
+            ),
+            child: IconButton(
+              icon: Icon(Icons.shopping_cart, color: Colors.amber  ),
+              onPressed: (){
+                Navigator.of(context).pushNamed(CartScreen.routeName);
+              },
+            )
           ),
-          child: IconButton(
-            icon: Icon(Icons.shopping_cart, color: Colors.amber  ),
+          IconButton(
+            icon: Icon(Icons.exit_to_app, color: Colors.grey),
             onPressed: (){
-              Navigator.of(context).pushNamed(CartScreen.routeName);
+              Navigator.of(context).pop();
+              Provider.of<Auth>(context).logout();
             },
           )
-
-        )
-      ],
+        ],
       ),
       body: Container(
         child: Column(

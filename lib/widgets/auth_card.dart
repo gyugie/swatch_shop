@@ -60,7 +60,6 @@ class _AuthCardState extends State<AuthCard> {
          await Provider.of<Auth>(context).login(_authData['email'], _authData['password']);
       } else {
          await Provider.of<Auth>(context).signUp(_authData['email'], _authData['password']);
-
         _showAlertDialog('Register Success','You have login now!');
       }
 
