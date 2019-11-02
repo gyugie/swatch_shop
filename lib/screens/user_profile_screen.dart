@@ -1,19 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:swatch_shop/screens/favorite_screen.dart';
-import 'package:swatch_shop/widgets/edit_profile.dart';
+import '../widgets/edit_profile.dart';
 import '../widgets/badge.dart';
 import '../providers/cart.dart';
 import '../screens/cart_screen.dart';
+import '../providers/user.dart';
 
-class UserProfileScreen extends StatelessWidget {
-  final _userInfoTitle = TextStyle(color: Colors.grey, fontSize: 14);
-  final _userInfoValue = TextStyle(color: Colors.black,  fontSize: 14);
+class UserProfileScreen extends StatefulWidget {
+  @override
+  _UserProfileScreenState createState() => _UserProfileScreenState();
+}
+
+class _UserProfileScreenState extends State<UserProfileScreen> {
+  final _userInfoTitle  = TextStyle(color: Colors.grey, fontSize: 14);
+  final _userInfoValue  = TextStyle(color: Colors.black,  fontSize: 14);
+  var _userdata         = User(userId: '', userName: '',fullName: '', email: '', password: '', phone: null, gender: '', dateOfBird: null, address: '',imageUrl: '');
+  var _isInit           = true;
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    if(_isInit){
+      _userdata = Provider.of<UserData>(context).getUserProfile();
+     
+    }
+
+    _isInit = false;
+    super.didChangeDependencies();
+  }
+
 
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
-    return  Scaffold(
+    return Scaffold(
       body: CustomScrollView(
         slivers: <Widget>[
            SliverAppBar(
@@ -66,18 +86,18 @@ class UserProfileScreen extends StatelessWidget {
                     Stack(
                       children: <Widget>[
                       Container(
-                          height: deviceSize.height * 0.3,
+                          height: deviceSize.height * 0.9,
                           width: double.infinity,
                           decoration: BoxDecoration(
                             image: DecorationImage(
                               image: AssetImage('assets/images/background-profile.jpg'),
-                              fit: BoxFit.fitWidth
+                              fit: BoxFit.fitHeight 
                             )
                           )
                         ),
                         Card(
-                          elevation: 3,
-                          margin: EdgeInsets.only(left: 15.0, right: 15.0, top: 30.0),
+                          elevation: 10,
+                          margin: EdgeInsets.only(left: 15.0, right: 15.0, top: 35.0),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(40), 
@@ -89,7 +109,13 @@ class UserProfileScreen extends StatelessWidget {
                               FractionalTranslation(
                                 translation: Offset(-0.01, -0.4),
                                 child: Center(
-                                  child: CircleAvatar(
+                                  child: _userdata.imageUrl != null ?
+                                   CircleAvatar(
+                                    radius: 40,
+                                    backgroundImage: NetworkImage(_userdata.imageUrl),
+                                  )
+                                  :
+                                   CircleAvatar(
                                     radius: 40,
                                     backgroundColor: Colors.white,
                                     child: new Icon(
@@ -106,7 +132,7 @@ class UserProfileScreen extends StatelessWidget {
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: <Widget>[
-                                      Text('Gyugie', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                                      Text('${_userdata.userName != null ? _userdata.userName :'Not Set'}', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
                                       SizedBox(width: 10),
                                       SizedBox(
                                         height: 18.0,
@@ -129,17 +155,17 @@ class UserProfileScreen extends StatelessWidget {
                                   padding: EdgeInsets.only(left: 20, right: 20),
                                   child: Column(
                                     children: <Widget>[
-                                      _profileDetail(context, 'Full Name', 'Mugiono Arif S'),
+                                      _profileDetail(context, 'Full Name', '${_userdata.fullName != null ? _userdata.fullName : '-'}'),
                                       Divider(),
-                                       _profileDetail(context, 'E-mail', 'mugypleci@gmail.com'),
+                                       _profileDetail(context, 'E-mail', '${_userdata.email != null ? _userdata.email : '-'}'),
                                       Divider(),
-                                       _profileDetail(context, 'Phone', '0896528074'),
+                                       _profileDetail(context, 'Phone', '${_userdata.phone != null ? _userdata.phone : '-'}'),
                                       Divider(),
-                                       _profileDetail(context, 'Gender', 'Male'),
+                                       _profileDetail(context, 'Gender', '${_userdata.gender != null ? _userdata.gender : '-'}'),
                                       Divider(),
-                                       _profileDetail(context, 'Date Of Bird', '1994/03/26'),
+                                       _profileDetail(context, 'Date Of Bird', '${_userdata.dateOfBird != null ? _userdata.dateOfBird : '-'}'),
                                       Divider(),
-                                       _profileDetail(context, 'Address', 'Jl. Naggrog 3 RT04/09 no.144, kelurahan pasir jati kecamatan Ujungberung Bandung, Kota Bandung'),
+                                       _profileDetail(context, 'Address', '${_userdata.address != null ? _userdata.address : '-'}'),
                                       Divider(),
 
                                     ],
