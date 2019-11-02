@@ -15,11 +15,11 @@ class User with ChangeNotifier {
   final String imageUrl;
 
   User({
-    @required this.userId,
+    this.userId,
     this.userName,
     this.fullName,
-    @required this.email,
-    @required this.password,
+    this.email,
+    this.password,
     this.gender,
     this.dateOfBird,
     this.phone,
