@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../widgets/edit_profile.dart';
 import '../widgets/badge.dart';
@@ -22,7 +23,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     // TODO: implement didChangeDependencies
     if(_isInit){
       _userdata = Provider.of<UserData>(context).getUserProfile();
-     
     }
 
     _isInit = false;
@@ -163,7 +163,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                       Divider(),
                                        _profileDetail(context, 'Gender', '${_userdata.gender != null ? _userdata.gender : '-'}'),
                                       Divider(),
-                                       _profileDetail(context, 'Date Of Bird', '${_userdata.dateOfBird != null ? _userdata.dateOfBird : '-'}'),
+                                       _profileDetail(context, 'Date Of Bird', '${_userdata.dateOfBird != null ? DateFormat.yMMMd().format(_userdata.dateOfBird) : '-'}'),
                                       Divider(),
                                        _profileDetail(context, 'Address', '${_userdata.address != null ? _userdata.address : '-'}'),
                                       Divider(),

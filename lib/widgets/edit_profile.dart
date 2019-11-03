@@ -14,10 +14,13 @@ class _EditProfileState extends State<EditProfile> {
   final _userInfoValue    = TextStyle(color: Colors.black,  fontSize: 14);
   final _userForm         = GlobalKey<FormState>();
   var _dateOfBird         = TextEditingController();
-  var _editUser           = User(userName: '', email: '' ,dateOfBird: null,fullName: '',imageUrl: '',phone: null, address: '',gender: '');
-  var _initValue          = {'username':'','full_name':'','email':'','phone':'','gender':'','date_of_bird': '','address':''};
-  DateTime _selectDate;
+  var _editUser           = User(id:'', userId: '', email: '' ,password: '', dateOfBird: null,fullName: '',imageUrl: '',phone: null, address: '',gender: '');
+  var _initValue          = {'username':'','id':'','userId':'','password':'','full_name':'','email':'','phone':'','gender':'','date_of_bird': '','address':''};
   var _isInit             = true;
+  var _isLoading          = false;
+  DateTime _selectDate;
+  String _selectedGender;
+  String _selectedGenderValidation;
 
   @override
   void dispose(){
@@ -27,14 +30,46 @@ class _EditProfileState extends State<EditProfile> {
 
  
   void _updateUserData() async {
-    final validate  = _userForm.currentState.validate();
+    var validate  = _userForm.currentState.validate();
+
+    if(_selectedGender == null ){
+      setState(() {
+        _selectedGenderValidation = 'Please choose an option';
+      });
+      validate = false;
+    }
 
     if(!validate){
       return;
     }
 
     _userForm.currentState.save();
-    print(_editUser.userName);
+    setState(() {
+      _isLoading = true;
+    });
+   try{
+     await Provider.of<UserData>(context, listen: false).updateUser(_editUser.id, _editUser);
+   } catch (err){
+     showDialog(
+       context: context,
+       builder: (ctx) => AlertDialog(
+         title: Text('An Error Occured'),
+         content: Text(err),
+         actions: <Widget>[
+           FlatButton(
+             child: Text('close', style: TextStyle(color: Colors.red)),
+             onPressed: (){
+               Navigator.of(context).pop();
+             },
+           )
+         ],
+       )
+     );
+   }
+   setState(() {
+      _isLoading = false;
+    });
+  Navigator.of(context).pop();
   }
 
   void _presentDatePicker() async {
@@ -73,14 +108,18 @@ class _EditProfileState extends State<EditProfile> {
       if(_isInit){
           _editUser = Provider.of<UserData>(context).getUserProfile();
          _initValue =  {
-          'username': _editUser.userName,
-          'full_name':_editUser.fullName,
+          'id': _editUser.id,
+          'userId': _editUser.userId,
+          'password': _editUser.password,
+          'userName': _editUser.userName,
+          'fullName':_editUser.fullName,
           'email': _editUser.email,
-          'phone': _editUser.phone != null ? _editUser.toString() : '' ,
+          'phone': _editUser.phone != null ? _editUser.phone.toString() : '' ,
           'gender': _editUser.gender,
-          'date_of_bird': _editUser.dateOfBird != null ? _editUser.dateOfBird.toString() : '',
+          'date_of_bird': _editUser.dateOfBird != null ? DateFormat.yMd().format(_editUser.dateOfBird) : '',
           'address': _editUser.address
           };
+          _selectedGender = _editUser.gender;
       }
 
       _isInit = false;
@@ -116,7 +155,25 @@ class _EditProfileState extends State<EditProfile> {
                           Container(
                               child:  ListTile(
                               leading: CircleAvatar(
-                                backgroundImage: NetworkImage('https://i0.wp.com/zblogged.com/wp-content/uploads/2019/02/FakeDP.jpeg?resize=567%2C580&ssl=1'),
+                                radius: 30,
+                                backgroundColor: Colors.white,
+                                child: 
+                                  _initValue['imageUrl'] != null
+                                  ?
+                                  CircleAvatar(
+                                    radius: 40,
+                                    backgroundImage: NetworkImage(_initValue['imageUrl']),
+                                  )
+                                  :
+                                  CircleAvatar(
+                                    radius: 40,
+                                    backgroundColor: Colors.white,
+                                    child: new Icon(
+                                      Icons.person_pin,
+                                      color: Colors.grey[350], 
+                                      size: 60.0,
+                                    ), 
+                                  ),
                               ),
                               trailing: FlatButton(
                                 child: Text('Edit Foto', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
@@ -136,7 +193,7 @@ class _EditProfileState extends State<EditProfile> {
                                     width: deviceSize.width * 0.5,
                                     child: TextFormField(
                                       autofocus: false,
-                                      initialValue: _initValue['username'],
+                                      initialValue: _initValue['userName'],
                                       validator: (value){
                                         if(value.isEmpty){
                                           return 'Please fill username';
@@ -144,6 +201,9 @@ class _EditProfileState extends State<EditProfile> {
                                       },
                                       onSaved: (value){
                                         _editUser = User(
+                                          id: _editUser.id,
+                                          userId: _editUser.userId,
+                                          password: _editUser.password,
                                           userName: value,
                                           fullName: _editUser.fullName,
                                           email: _editUser.email,
@@ -171,7 +231,7 @@ class _EditProfileState extends State<EditProfile> {
                                     width: deviceSize.width * 0.5,
                                     child: TextFormField(
                                       autofocus: false,
-                                      initialValue: _initValue['full_name'],
+                                      initialValue: _initValue['fullName'],
                                       validator: (value){
                                         if(value.isEmpty){
                                           return 'Please fill full name';
@@ -179,6 +239,9 @@ class _EditProfileState extends State<EditProfile> {
                                       },
                                       onSaved: (value){
                                         _editUser = User(
+                                          id: _editUser.id,
+                                          userId: _editUser.userId,
+                                          password: _editUser.password,
                                           userName: _editUser.userName,
                                           fullName: value,
                                           email: _editUser.email,
@@ -222,27 +285,63 @@ class _EditProfileState extends State<EditProfile> {
                                 children: <Widget>[
                                   Container(
                                     width: deviceSize.width * 0.5,
-                                    child: TextFormField(
-                                      autofocus: false,
-                                      initialValue: _initValue['gender'],
-                                      validator: (value){
-                                        if(value.isEmpty){
-                                          return 'Please choose your gender';
-                                        }
+                                    child: DropdownButton<String>(
+                                      value: _selectedGender,
+                                      icon: null,
+                                      iconSize: 24,
+                                      elevation: 16,
+                                      style: TextStyle(color: Colors.black),
+                                      hint: Text('Choose Gender'),
+                                      underline: Container(
+                                        height: 2,
+                                        color: Colors.grey,
+                                      ),
+                                      onChanged: (String value) {
+                                        setState(() {
+                                          _selectedGender = value;
+                                          _selectedGenderValidation = null;
+                                        });
+
+                                         _editUser = User(
+                                              id: _editUser.id,
+                                              userId: _editUser.userId,
+                                              password: _editUser.password,
+                                              userName: _editUser.userName,
+                                              fullName: _editUser.fullName,
+                                              email: _editUser.email,
+                                              gender: value,
+                                              dateOfBird: _editUser.dateOfBird,
+                                              phone: _editUser.phone,
+                                              address: _editUser.address,
+                                              imageUrl: _editUser.imageUrl
+                                            );
                                       },
-                                      onSaved: (value){
-                                        _editUser = User(
-                                          userName: _editUser.userName,
-                                          fullName: _editUser.fullName,
-                                          email: _editUser.email,
-                                          gender: value,
-                                          phone: _editUser.phone,
-                                          dateOfBird: _editUser.dateOfBird,
-                                          address: _editUser.address,
-                                          imageUrl: _editUser.imageUrl
+                                      items: <String>['Male','Female']
+                                          .map<DropdownMenuItem<String>>((String value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: Text(value),
                                         );
-                                      },
-                                    )
+                                      }).toList(),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            ),
+                          ),
+                          _selectedGenderValidation == null
+                          ? 
+                          SizedBox.shrink()
+                          :
+                          Container(
+                              child:  ListTile(
+                              title: Text('',  style: _userInfoTitle),
+                              trailing:new Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  Container(
+                                    width: deviceSize.width * 0.5,
+                                    child: Text(_selectedGenderValidation, style: TextStyle(color: Colors.red))
                                   ),
                                 ],
                               )
@@ -282,8 +381,11 @@ class _EditProfileState extends State<EditProfile> {
                                             },
                                             onSaved: (value){
                                               _editUser = User(
+                                                  id: _editUser.id,
                                                   userName: _editUser.userName,
-                                                  fullName: value,
+                                                  userId: _editUser.userId,
+                                                  password: _editUser.password,
+                                                  fullName: _editUser.fullName,
                                                   email: _editUser.email,
                                                   gender: _editUser.gender,
                                                   dateOfBird: _selectDate,
@@ -319,7 +421,10 @@ class _EditProfileState extends State<EditProfile> {
                                       },
                                       onSaved: (value){
                                         _editUser = User(
+                                                  id: _editUser.id,
                                                   userName: _editUser.userName,
+                                                  userId: _editUser.userId,
+                                                  password: _editUser.password,
                                                   fullName: _editUser.fullName,
                                                   email: _editUser.email,
                                                   gender: _editUser.gender,
@@ -367,7 +472,10 @@ class _EditProfileState extends State<EditProfile> {
                                     },
                                     onSaved: (value){
                                       _editUser = User(
+                                                  id: _editUser.id,
                                                   userName: _editUser.userName,
+                                                  userId: _editUser.userId,
+                                                  password: _editUser.password,
                                                   fullName: _editUser.fullName,
                                                   email: _editUser.email,
                                                   gender: _editUser.gender,
@@ -395,7 +503,7 @@ class _EditProfileState extends State<EditProfile> {
                         ),
                         color: Colors.amber,
                         onPressed:_updateUserData,
-                        child: Text("Save", style: TextStyle(fontSize: 16)),
+                        child:  _isLoading ? CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.white)) : Text("Save", style: TextStyle(fontSize: 16)),
                       ),
                     ),
                     SizedBox(height: 5),
