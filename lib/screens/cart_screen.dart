@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../providers/user.dart';
 import '../widgets/cart_list.dart';
 import '../providers/cart.dart';
+import '../providers/orders.dart';
 
 class CartScreen extends StatefulWidget {
   static const routeName = '/cart-screen';
@@ -273,8 +274,10 @@ class _CartScreenState extends State<CartScreen> {
                           borderRadius: new BorderRadius.circular(50.0),
                   ),
                   color: Colors.amber,
-                  onPressed: totalCart == 0 ? null : () {},
                   child: Text("Order", style: TextStyle(fontSize: 16)),
+                  onPressed: totalCart == 0 ? null : () {
+                    Provider.of<Orders>(context, listen: false).addOrder(cart.cart.values.toList(), cart.subTotal + _courierValue, _courierValue, cart.subTotal);
+                  },
                 ),
               ),
               SizedBox(height: 4),

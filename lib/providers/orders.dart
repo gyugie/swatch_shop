@@ -1,0 +1,44 @@
+import 'package:flutter/cupertino.dart';
+import 'package:swatch_shop/providers/cart.dart';
+import '../providers/cart.dart';
+
+class OrderItem {
+  final String id;
+  final double amount;
+  final double subTotal;
+  final double shippingAmount;
+  final List<CartItem> products;
+  final DateTime dateTime;
+
+  OrderItem({
+    @required this.id,
+    @required this.amount,
+    @required this.subTotal,
+    @required this.shippingAmount,
+    @required this.products,
+    @required this.dateTime
+  });
+}
+
+class Orders with ChangeNotifier {
+  List<OrderItem> _orders = [];
+
+  List<OrderItem> get order {
+    return [..._orders];
+  }
+
+  Future<void> addOrder(List<CartItem> cart, double total, double shippingAmount, double subTotal ){
+    _orders.insert(
+      0, OrderItem(
+        id: DateTime.now().toString(),
+        dateTime: DateTime.now(),
+        amount: total,
+        shippingAmount: shippingAmount,
+        subTotal: subTotal,
+        products: cart
+      ));
+
+      notifyListeners();
+      print(_orders.length);
+  }
+}
