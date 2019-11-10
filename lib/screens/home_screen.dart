@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:provider/provider.dart';
+import '../screens/splash_screen.dart';
 import '../screens/cart_screen.dart';
 import '../widgets/badge.dart';
 import '../widgets/product_grid.dart';
@@ -61,8 +62,9 @@ class _HomeScreenState extends State<HomeScreen>  with SingleTickerProviderState
           IconButton(
             icon: Icon(Icons.exit_to_app, color: Colors.grey),
             onPressed: (){
-              Navigator.of(context).pop();
               Provider.of<Auth>(context).logout();
+              Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+              SplashScreen()), (Route<dynamic> route) => false);
             },
           )
         ],

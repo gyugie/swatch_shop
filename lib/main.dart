@@ -57,12 +57,12 @@ class MyApp extends StatelessWidget {
               ),
             )
           ),
-          home:
-          authData.isAuth ? OverviewScreen() : FutureBuilder(
-            future: authData.tryToAutoLogin(),
-            builder: (ctx, authSnapShot) => 
-              authSnapShot.connectionState == ConnectionState.waiting ? SplashScreen() : AuthScreen(),
-          ),
+          home: SplashScreen(),
+          // authData.isAuth ? OverviewScreen() : FutureBuilder(
+          //   future: authData.tryToAutoLogin(),
+          //   builder: (ctx, authSnapShot) => 
+          //     authSnapShot.connectionState == ConnectionState.waiting ? SplashScreen() : AuthScreen(),
+          // ),
           routes: {
            ProductDetailScreen.routeName : (ctx) => ProductDetailScreen(),
            CartScreen.routeName : (ctx) => CartScreen(),
