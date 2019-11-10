@@ -13,16 +13,18 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   Timer _timer;
   var _isInit = true;
+  var cachedSession = false;
 
-
+  
   void checkingUserSession(){
    _timer = Timer(Duration(seconds: 2), (){
-      var userAuth = Provider.of<Auth>(context, listen: false); 
-        !userAuth.isAuth || userAuth.tryToAutoLogin() != true ?   
-          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-          AuthScreen()), (Route<dynamic> route) => false)
-        :  Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-          OverviewScreen()), (Route<dynamic> route) => false);
+  //     var userAuth = Provider.of<Auth>(context, listen: false); 
+  //       userAuth.isAuth ?   
+  //         Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+  //         OverviewScreen()), (Route<dynamic> route) => false)
+  //       :  Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+  //         AuthScreen()), (Route<dynamic> route) => false);
+  //  print(userAuth.isAuth);
    });
   }
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:swatch_shop/widgets/cart_list.dart';
+import '../providers/user.dart';
+import '../widgets/cart_list.dart';
 import '../providers/cart.dart';
 
 class CartScreen extends StatefulWidget {
@@ -11,9 +12,10 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
-  double _courierValue = 12.000;
-  int _courierType = 0;
-  
+  double _courierValue  = 12.000;
+  int _courierType      = 0;
+  var _userdata         = User(userId: '', userName: '',fullName: '', email: '', password: '', phone: null, gender: '', dateOfBird: null, address: '',imageUrl: null);
+  var _isInit           = true;
   void _handleRadioCourierValue(int value) {
     setState(() {
       _courierType = value;
@@ -33,10 +35,21 @@ class _CartScreenState extends State<CartScreen> {
   }
 
   @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    if(_isInit){
+      _userdata = Provider.of<UserData>(context).getUserProfile();
+    }
+
+    _isInit = false;
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
     double  _height;
     final deviceSice  = MediaQuery.of(context).size;
-    final cart        = Provider.of<Cart>(context);
+    final cart        = Provider.of<Cart>(context, listen: false);
     final totalCart   = cart.cartCount;
     switch (totalCart){
       case 0:
@@ -58,7 +71,7 @@ class _CartScreenState extends State<CartScreen> {
 
     return Scaffold(
         appBar: AppBar(
-          title: Text('Your Cart', style: TextStyle(color: Colors.white)),
+          title: Text('Cart', style: TextStyle(color: Colors.white)),
           iconTheme: IconThemeData(color: Colors.white),
           backgroundColor: Colors.amber,
         ),
@@ -197,7 +210,7 @@ class _CartScreenState extends State<CartScreen> {
                       Container(
                         padding: EdgeInsets.all(10),
                         alignment: Alignment.centerLeft,
-                        child: Text('Soon...!', style: TextStyle(fontSize: 14)),
+                        child: Text('${_userdata.address}', style: TextStyle(fontSize: 14)),
                       )
 
                     ],

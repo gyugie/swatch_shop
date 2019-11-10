@@ -59,8 +59,8 @@ class _AuthCardState extends State<AuthCard> {
     try{
       if(_authMode == AuthMode.Login){
          await Provider.of<Auth>(context).login(_authData['email'], _authData['password']);
-        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-          OverviewScreen()), (Route<dynamic> route) => false);
+        // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+        //   OverviewScreen()), (Route<dynamic> route) => false);
       } else {
          await Provider.of<Auth>(context).signUp(_authData['email'], _authData['password']);
         _showAlertDialog('Register Success','You have login now!');

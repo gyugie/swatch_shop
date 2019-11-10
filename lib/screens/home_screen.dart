@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:provider/provider.dart';
-import '../screens/splash_screen.dart';
+import '../screens/auth_screens.dart';
 import '../screens/cart_screen.dart';
 import '../widgets/badge.dart';
 import '../widgets/product_grid.dart';
@@ -63,8 +63,7 @@ class _HomeScreenState extends State<HomeScreen>  with SingleTickerProviderState
             icon: Icon(Icons.exit_to_app, color: Colors.grey),
             onPressed: (){
               Provider.of<Auth>(context).logout();
-              Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-              SplashScreen()), (Route<dynamic> route) => false);
+              Navigator.of(context).pop();
             },
           )
         ],
@@ -135,10 +134,11 @@ class _HomeScreenState extends State<HomeScreen>  with SingleTickerProviderState
               Container(
                 height: deviceSize.height * 0.45,
                 padding: EdgeInsets.all(3),
-                child:  TabBarView(
+                child: TabBarView(
                   controller: _controller,
+                  physics: NeverScrollableScrollPhysics(),
                   children: <Widget>[
-                    Container(
+                     Container(
                         child: ProductGrid(_categories)
                     ),
                     Container(
