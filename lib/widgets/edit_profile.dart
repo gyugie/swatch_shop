@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 import '../providers/user.dart';
+import '../providers/utility.dart';
+
 
 class EditProfile extends StatefulWidget {
   static const routeName  = '/edit-profile';
@@ -21,6 +25,9 @@ class _EditProfileState extends State<EditProfile> {
   DateTime _selectDate;
   String _selectedGender;
   String _selectedGenderValidation;
+  Future<File> imageFile;
+  Image imageFromPreferences;
+
 
   @override
   void dispose(){
@@ -102,6 +109,51 @@ class _EditProfileState extends State<EditProfile> {
 
   }
 
+  pickImageFromGallery(ImageSource source) {
+    setState(() {
+      imageFile = ImagePicker.pickImage(source: source);
+    });
+
+  }
+ 
+  loadImageFromPreferences() {
+    Utility.getImageFromPreferences().then((img) {
+      if (null == img) {
+        return;
+      }
+      setState(() {
+        imageFromPreferences = Utility.imageFromBase64String(img);
+      });
+    });
+  }
+
+  Widget imageFromGallery() {
+      return FutureBuilder<File>(
+        future: imageFile,
+        builder: (BuildContext context, AsyncSnapshot<File> snapshot) {
+          if (snapshot.connectionState == ConnectionState.done &&
+              null != snapshot.data) {
+            Utility.saveImageToPreferences( Utility.base64String(snapshot.data.readAsBytesSync() ));
+          
+            return Image.file(
+              snapshot.data,
+            );
+            
+          } else if (null != snapshot.error) {
+            return const Text(
+              'Error Picking Image',
+              textAlign: TextAlign.center,
+            );
+          } else {
+            return const Text(
+              'No Image Selected',
+              textAlign: TextAlign.center,
+            );
+          }
+        },
+      );
+  }
+
   @override
   void didChangeDependencies(){
 
@@ -120,6 +172,8 @@ class _EditProfileState extends State<EditProfile> {
           'address': _editUser.address
           };
           _selectedGender = _editUser.gender;
+        loadImageFromPreferences();
+          
       }
 
       _isInit = false;
@@ -136,6 +190,23 @@ class _EditProfileState extends State<EditProfile> {
         title: Text('Edit Profile'),
         centerTitle: true,
         backgroundColor: Colors.white,
+        actions: <Widget>[
+          // IconButton(
+          //   icon: Icon(Icons.add),
+          //   onPressed: () {
+          //     pickImageFromGallery(ImageSource.gallery);
+          //     setState(() {
+          //       imageFromPreferences = null;
+          //     });
+          //   },
+          // ),
+          // IconButton(
+          //   icon: Icon(Icons.refresh),
+          //   onPressed: () {
+          //     loadImageFromPreferences();
+          //   },
+          // ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -158,11 +229,12 @@ class _EditProfileState extends State<EditProfile> {
                                 radius: 30,
                                 backgroundColor: Colors.white,
                                 child: 
-                                  _initValue['imageUrl'] != null
+                                 imageFromPreferences != null
                                   ?
-                                  CircleAvatar(
-                                    radius: 40,
-                                    backgroundImage: NetworkImage(_initValue['imageUrl']),
+                                  Container(
+                                    width: 80.0,
+                                    height: 80.0,
+                                    child: imageFromPreferences,
                                   )
                                   :
                                   CircleAvatar(
@@ -174,11 +246,17 @@ class _EditProfileState extends State<EditProfile> {
                                       size: 60.0,
                                     ), 
                                   ),
+                                 
                               ),
                               trailing: FlatButton(
                                 child: Text('Edit Foto', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
                                 onPressed: (){
-                                  
+                                    setState(() {
+                                      imageFromPreferences = null;
+                                    });
+                                  pickImageFromGallery(ImageSource.gallery);
+                                  loadImageFromPreferences();
+                                    
                                 },
                               )
                             ),
@@ -516,3 +594,4 @@ class _EditProfileState extends State<EditProfile> {
     );
   }
 }
+  

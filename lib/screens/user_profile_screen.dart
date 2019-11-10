@@ -15,7 +15,7 @@ class UserProfileScreen extends StatefulWidget {
 class _UserProfileScreenState extends State<UserProfileScreen> {
   final _userInfoTitle  = TextStyle(color: Colors.grey, fontSize: 14);
   final _userInfoValue  = TextStyle(color: Colors.black,  fontSize: 14);
-  var _userdata         = User(userId: '', userName: '',fullName: '', email: '', password: '', phone: null, gender: '', dateOfBird: null, address: '',imageUrl: '');
+  var _userdata         = User(userId: '', userName: '',fullName: '', email: '', password: '', phone: null, gender: '', dateOfBird: null, address: '',imageUrl: null);
   var _isInit           = true;
 
   @override
@@ -112,7 +112,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                   child: _userdata.imageUrl != null ?
                                    CircleAvatar(
                                     radius: 40,
-                                    backgroundImage: NetworkImage(_userdata.imageUrl),
+                                    backgroundImage:null //NetworkImage(_userdata.imageUrl),
                                   )
                                   :
                                    CircleAvatar(

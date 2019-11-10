@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "926598088106",
+    "firebase_url": "https://swatch-shop.firebaseio.com",
+    "project_id": "swatch-shop",
+    "storage_bucket": "swatch-shop.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:926598088106:android:397fb93fcc5834770617d3",
+        "android_client_info": {
+          "package_name": "com.example.swatch_shop"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "926598088106-v892rtq2uc2dk2mbav5c2hr8q65hogo8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDh2ow3pWy4f_dMyr8E3kNjEg2sRpQLDuo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "926598088106-v892rtq2uc2dk2mbav5c2hr8q65hogo8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -138,7 +138,6 @@ class Auth with ChangeNotifier{
      );
      
      final responseData  = json.decode(response.body);
-     print(responseData);
    } catch (err){
 
    }

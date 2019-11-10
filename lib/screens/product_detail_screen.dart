@@ -38,52 +38,52 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>  with SingleT
               pinned: true,
               snap: false,
                elevation: 0.0,
-              backgroundColor: Colors.transparent,
-              actions: <Widget>[
-                Consumer<Cart>(
-                  builder: (_, cartData, ch) => Badge(
-                    child: ch,
-                    value: cartData.cartCount.toString(),
-                  ),
-                  child: IconButton(
-                    icon: Icon(Icons.shopping_cart, color: Colors.black),
-                    onPressed: (){
-                      Navigator.of(context).pushNamed(CartScreen.routeName);
-                    },
+                backgroundColor: Colors.transparent,
+                actions: <Widget>[
+                  Consumer<Cart>(
+                    builder: (_, cartData, ch) => Badge(
+                      child: ch,
+                      value: cartData.cartCount.toString(),
+                    ),
+                    child: IconButton(
+                      icon: Icon(Icons.shopping_cart, color: Colors.black),
+                      onPressed: (){
+                        Navigator.of(context).pushNamed(CartScreen.routeName);
+                      },
+                    )
                   )
-                )
-              ],
-              expandedHeight: deviceSize.height * 0.3,
-              flexibleSpace: FlexibleSpaceBar(
-                background: Hero(
-                  tag: product.product_id,
-                  child: Container(
-                    child: SizedBox(
-                        height: deviceSize.height * 0.25,
-                        width: double.infinity,
-                        child: Carousel(
-                          images: product.product_image.map((url){
-                            return NetworkImage(url);
-                          }).toList(),
-                          showIndicator: true,
-                          dotSize: 5,
-                          indicatorBgPadding: 10,
-                          dotColor: Colors.grey,
-                          dotIncreasedColor: Colors.black,
-                          dotBgColor: Colors.transparent,
-                          boxFit: BoxFit.fitWidth,
-                          borderRadius: false,
-                          moveIndicatorFromBottom: 180.0,
-                          noRadiusForIndicator: true,
-                          overlayShadow: true,
-                          overlayShadowColors: Colors.white,
-                          overlayShadowSize: 0.7,
+                ],
+                expandedHeight: deviceSize.height * 0.3,
+                flexibleSpace: FlexibleSpaceBar(
+                  background: Hero(
+                    tag: product.product_id,
+                    child: Container(
+                      child: SizedBox(
+                          height: deviceSize.height * 0.25,
+                          width: double.infinity,
+                          child: Carousel(
+                            images: product.product_image.map((url){
+                              return NetworkImage(url);
+                            }).toList(),
+                            showIndicator: true,
+                            dotSize: 5,
+                            indicatorBgPadding: 10,
+                            dotColor: Colors.grey,
+                            dotIncreasedColor: Colors.black,
+                            dotBgColor: Colors.transparent,
+                            boxFit: BoxFit.fitWidth,
+                            borderRadius: false,
+                            moveIndicatorFromBottom: 180.0,
+                            noRadiusForIndicator: true,
+                            overlayShadow: true,
+                            overlayShadowColors: Colors.white,
+                            overlayShadowSize: 0.7,
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
             SliverList(
               delegate: SliverChildListDelegate([
                 //sub header
