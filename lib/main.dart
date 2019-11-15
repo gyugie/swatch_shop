@@ -35,8 +35,11 @@ class MyApp extends StatelessWidget {
          ChangeNotifierProvider.value(
           value: Cart()
         ),
-        ChangeNotifierProvider.value(
-          value: Orders(),
+        ChangeNotifierProxyProvider<Auth, Orders>(
+          builder: (ctx, auth, cachedOrders) => Orders(
+            auth.userId,
+            auth.token
+          ), initialBuilder: (BuildContext context) {return;},
         )
       ],
       child: Consumer<Auth>(
