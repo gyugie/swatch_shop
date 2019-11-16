@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../widgets/order_card.dart';
+import '../providers/orders.dart';
 
 class OrderScreen extends StatefulWidget {
   @override
@@ -9,7 +11,9 @@ class OrderScreen extends StatefulWidget {
 class _OrderScreenState extends State<OrderScreen> with SingleTickerProviderStateMixin {
   TabController _controller;
   var _categories   = 'delivered';
-  
+  var _isInit       = true;
+  var _isLoading    = false;
+  var _orders;
 
   @override
   void initState() {
@@ -97,9 +101,33 @@ class _OrderScreenState extends State<OrderScreen> with SingleTickerProviderStat
                   physics: NeverScrollableScrollPhysics(),
                   children: <Widget>[
                     Container(
-                        child: ListView.builder(
-                          itemCount: 19,
-                          itemBuilder: (ctx, index) => OrderCard(),
+                        child: FutureBuilder(
+                          future: Provider.of<Orders>(context, listen: false).fetchAndSetOrder(),
+                          builder: (context,  snapshot) { 
+                              switch (snapshot.connectionState) { 
+                                case ConnectionState.none: 
+                                  return null; 
+                                case ConnectionState.waiting: 
+                                  return Center(
+                                      child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.amber)),
+                                    ); 
+                                case ConnectionState.active: 
+                                  return null; 
+                                case ConnectionState.done: 
+                                  if (snapshot.error != null){
+                                    return Center(
+                                      child: Image.asset('assets/images/cartempty.png',height: 100,),
+                                    );
+                                  } 
+                                    return Consumer<Orders>(
+                                      builder: (ctx, orderData, child) => ListView.builder(
+                                        itemCount: orderData.order.length,
+                                        itemBuilder: (ctx, index) => OrderCard(orderData.order[index]),
+                                      ),
+                                    );
+                              }
+                             return null;  // unreachable 
+                           }, 
                         )
                     ),
                     Container(

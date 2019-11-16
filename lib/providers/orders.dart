@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
+import 'package:intl/intl.dart';
 import 'package:swatch_shop/providers/cart.dart';
 import 'package:http/http.dart' as http;
 import 'dart:math';
@@ -32,13 +33,49 @@ class Orders with ChangeNotifier {
   final String _authToken;
   List<OrderItem> _orders = [];
 
-  Orders(this._userId, this._authToken);
+  Orders(this._userId, this._authToken, this._orders);
 
   List<OrderItem> get order {
     return [..._orders];
   }
 
   Future<void> fetchAndSetOrder() async {
+    final url               = 'https://swatch-shop.firebaseio.com/orders/$_userId.json?auth=$_authToken';
+    try{
+
+      final response    = await http.get(url);
+      final responseData= json.decode(response.body) as Map<String, dynamic>;
+      final List<OrderItem> loadedOrders = [];
+      
+      if(responseData['error'] != null){
+        throw HttpException(responseData['error']['message']);
+      }
+
+      responseData.forEach((orderId, orderData){
+        loadedOrders.add(OrderItem(
+          orderId: orderData['orderId'],
+          shippingAmount: orderData['shippingAmount'],
+          subTotal: orderData['subTotal'],
+          amount: orderData['total'],
+          courierName: orderData['courier'],
+          dateTime: DateTime.parse(orderData['dateTime']),
+          products: (orderData['cart'] as List<dynamic>).map((order)=>
+            CartItem(
+             product_id: order['product_id'],
+             product_image: order['product_image'],
+             product_name: order['product_name'],
+             product_price: order['product_price'],
+             quantity: order['quantity'] 
+            )
+          ).toList()
+        ));
+      });
+
+       _orders = loadedOrders.reversed.toList();
+        notifyListeners();
+    } catch (err){
+      throw err;
+    }
 
   }
 
@@ -58,6 +95,7 @@ class Orders with ChangeNotifier {
           'shippingAmount': shippingAmount,
           'courier': courierName,
           'total' : total,
+          'dateTime': DateTime.now().toIso8601String(),
           'cart' : cart.map( (cart)=>{
               'product_id' : cart.product_id,
               'product_name': cart.product_name,
@@ -85,7 +123,7 @@ class Orders with ChangeNotifier {
         shippingAmount: shippingAmount,
         courierName: courierName,
         subTotal: subTotal,
-        products: cart
+        products: cart,
       ));
 
       notifyListeners();

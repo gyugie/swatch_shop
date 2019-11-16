@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../providers/orders.dart' as ord;
 
 class OrderCard extends StatelessWidget {
+final ord.OrderItem order;
+
+OrderCard(this.order);
+
   @override
   Widget build(BuildContext context) {
+    
     return Card(
       child: Container(
       padding: EdgeInsets.all(15),
@@ -13,8 +19,8 @@ class OrderCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text('Order swatch#123', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.black)),
-                Text(DateFormat.yMMMd().format(DateTime.now()), style: TextStyle(fontSize: 16, color: Colors.grey)),
+                Text('${order.orderId}', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.black)),
+                Text(DateFormat.yMMMd().format(order.dateTime), style: TextStyle(fontSize: 16, color: Colors.grey)),
               ],
             ),
             SizedBox(height: 10),
@@ -37,8 +43,8 @@ class OrderCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                Text('Total Amount : ', style: TextStyle(fontSize: 16, color: Colors.grey)),
-                Text('3', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.black)),
+                Text('Total Amount :', style: TextStyle(fontSize: 16, color: Colors.grey)),
+                Text('${order.amount}', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.black)),
               ],
             ),
             SizedBox(height: 15),
