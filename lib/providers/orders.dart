@@ -1,11 +1,11 @@
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:swatch_shop/providers/cart.dart';
 import 'package:http/http.dart' as http;
-import 'package:swatch_shop/providers/http_exception.dart';
-import '../providers/cart.dart';
 import 'dart:math';
+
+import '../providers/http_exception.dart';
+import '../providers/cart.dart';
 
 class OrderItem {
   final String orderId;
@@ -33,8 +33,13 @@ class Orders with ChangeNotifier {
   List<OrderItem> _orders = [];
 
   Orders(this._userId, this._authToken);
+
   List<OrderItem> get order {
     return [..._orders];
+  }
+
+  Future<void> fetchAndSetOrder() async {
+
   }
 
   Future<void> addOrder(List<CartItem> cart, double total, double shippingAmount, String courierName, double subTotal ) async {
@@ -63,8 +68,12 @@ class Orders with ChangeNotifier {
         })
       );
 
+      final responseData = json.decode(response.body);
+      if(responseData['error'] != null){
+        throw HttpException(responseData['error']['message']);
+      }
+
     }catch (err){
-      
       throw err;
     }
 

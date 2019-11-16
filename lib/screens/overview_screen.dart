@@ -20,10 +20,10 @@ class _OverviewScreenState extends State<OverviewScreen> {
   var _isInit                         = true;
   static const  _labelBottomBarStyle  = TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14);
   List<TabItem> tabItems              = List.of([
-                  new TabItem(Icons.home, "Home", Colors.yellow[50], labelStyle: _labelBottomBarStyle),
-                  new TabItem(Icons.favorite, "Favorites", Colors.yellow[50], labelStyle: _labelBottomBarStyle),
-                  new TabItem(Icons.swap_horiz, "Orders", Colors.yellow[50], labelStyle: _labelBottomBarStyle),
-                  new TabItem(Icons.person, "Profile", Colors.yellow[50], labelStyle: _labelBottomBarStyle),
+                  new TabItem(Icons.home, "Home", Colors.white, labelStyle: _labelBottomBarStyle),
+                  new TabItem(Icons.favorite, "Favorites", Colors.white, labelStyle: _labelBottomBarStyle),
+                  new TabItem(Icons.swap_horiz, "Orders", Colors.white, labelStyle: _labelBottomBarStyle),
+                  new TabItem(Icons.person, "Profile", Colors.white, labelStyle: _labelBottomBarStyle),
                 ]);
 
 
@@ -70,13 +70,13 @@ class _OverviewScreenState extends State<OverviewScreen> {
     var _page;
     Color selectedColor = tabItems[selectedPos].circleColor;
     switch (selectedPos) {
-      case 0:
+      case 2:
         _page = HomeScreen();
         break;
       case 1:
          _page = FavoritesScreen();
         break;
-      case 2:
+      case 0:
          _page = OrderScreen();
         break;
       case 3:
@@ -100,7 +100,7 @@ class _OverviewScreenState extends State<OverviewScreen> {
       animationDuration: Duration(milliseconds: 800),
       selectedIconColor: Colors.cyan[900],
       normalIconColor: Colors.white,
-      circleStrokeWidth: 3,
+      circleStrokeWidth: 0,
       selectedCallback: (int selectedPos) {
         setState(() {
           this.selectedPos = selectedPos;
