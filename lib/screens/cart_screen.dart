@@ -50,10 +50,11 @@ class _CartScreenState extends State<CartScreen> {
       _isLoading = true;
     });
     try{
-      await Provider.of<Orders>(context, listen: false).addOrder(cart.cart.values.toList(), cart.subTotal + _courierValue, _courierValue, _courierName, cart.subTotal);
-      setState(() {
-      totalCart = 0;
-    });
+        await Provider.of<Orders>(context, listen: false).addOrder(cart.cart.values.toList(), cart.subTotal + _courierValue, _courierValue, _courierName, cart.subTotal);
+        setState(() {
+          totalCart = 0;
+        });
+        Provider.of<Cart>(context).clearCart();
         CustomNotif.alertDialogWithIcon(context, Icons.check_circle_outline, 'Congratulations', 'your order success and will be proccess, please completed payment. \n\n Thanks...', false);
     }catch (err){
         CustomNotif.alertDialogWithIcon(context, Icons.highlight_off,'An error occured!', err.toString(), true);

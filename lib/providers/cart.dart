@@ -85,5 +85,8 @@ class Cart with ChangeNotifier{
     notifyListeners();
   }
 
+  clearCart(){
+    _carts = {};
+  }
 
 }

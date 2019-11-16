@@ -9,7 +9,7 @@ OrderCard(this.order);
 
   @override
   Widget build(BuildContext context) {
-    
+    print(order.courierName);
     return Card(
       child: Container(
       padding: EdgeInsets.all(15),
@@ -24,21 +24,19 @@ OrderCard(this.order);
               ],
             ),
             SizedBox(height: 10),
-            Row(
-              children: <Widget>[
-                Image.asset('assets/images/SiCepat.png', width: 50),
-                SizedBox(width: 10),
-                RichText(
-                  text: TextSpan(
-                    text: 'SiCepat',
-                    style: TextStyle(fontSize: 14, color: Colors.grey),
-                    children: <TextSpan>[
-                      TextSpan(text: '\nRp. 15.000 (1 Hari Kerja)', style: TextStyle(color: Colors.black)),
-                    ],
-                  ),
-                )
-              ],
-            ),
+          
+            (order.courierName == 'JNE') 
+            ?
+            courierJne()
+            :
+              (order.courierName == 'J&T')
+              ?
+              courierJnt()
+              :
+              courierSicepat(),
+            
+           
+
             SizedBox(height: 15),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -68,5 +66,57 @@ OrderCard(this.order);
       ),
     );
    
+  }
+
+  Widget courierSicepat(){
+    return Row(
+      children: <Widget>[
+        Image.asset('assets/images/SiCepat.png', width: 50),
+        SizedBox(width: 10),
+        RichText(
+          text: TextSpan(
+            text: 'SiCepat',
+            style: TextStyle(fontSize: 14, color: Colors.grey),
+            children: <TextSpan>[
+              TextSpan(text: '\nRp. 15.000 (1 Hari Kerja)', style: TextStyle(color: Colors.black)),
+            ],
+          ),
+        )
+      ],
+    );
+  }
+  Widget courierJnt(){
+   return Row(
+      children: <Widget>[
+        Image.asset('assets/images/J&T.png', width: 50),
+        SizedBox(width: 10),
+        RichText(
+          text: TextSpan(
+            text: 'JNE REG ',
+            style: TextStyle(fontSize: 14, color: Colors.black),
+            children: <TextSpan>[
+              TextSpan(text: '\nRp. 12.000 (3 Hari Kerja)', style: TextStyle(color: Colors.grey)),
+            ],
+          ),
+        )
+      ],
+    );
+  }
+  Widget courierJne(){
+    return Row(
+      children: <Widget>[
+        Image.asset('assets/images/JNE.png', width: 50),
+        SizedBox(width: 10),
+        RichText(
+          text: TextSpan(
+            text: 'J&T REG ',
+            style: TextStyle(fontSize: 14, color: Colors.black),
+            children: <TextSpan>[
+              TextSpan(text: '\nRp. 14.000 (2 Hari Kerja)', style: TextStyle(color: Colors.grey)),
+            ],
+          ),
+        )
+      ],
+    );
   }
 }

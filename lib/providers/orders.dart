@@ -16,6 +16,8 @@ class OrderItem {
   final String courierName;
   final List<CartItem> products;
   final DateTime dateTime;
+  final String status;
+  final String creatorId;
 
   OrderItem({
     @required this.orderId,
@@ -24,7 +26,9 @@ class OrderItem {
     @required this.shippingAmount,
     @required this.courierName,
     @required this.products,
-    @required this.dateTime
+    @required this.dateTime,
+    @required this.status,
+    @required this.creatorId,
   });
 }
 
@@ -40,17 +44,15 @@ class Orders with ChangeNotifier {
   }
 
   Future<void> fetchAndSetOrder() async {
-    final url               = 'https://swatch-shop.firebaseio.com/orders/$_userId.json?auth=$_authToken';
+    final url               = 'https://swatch-shop.firebaseio.com/orders.json?auth=$_authToken&orderBy="creatorId"&equalTo="$_userId"';
     try{
 
       final response    = await http.get(url);
       final responseData= json.decode(response.body) as Map<String, dynamic>;
       final List<OrderItem> loadedOrders = [];
-      
       if(responseData['error'] != null){
         throw HttpException(responseData['error']['message']);
       }
-
       responseData.forEach((orderId, orderData){
         loadedOrders.add(OrderItem(
           orderId: orderData['orderId'],
@@ -59,6 +61,8 @@ class Orders with ChangeNotifier {
           amount: orderData['total'],
           courierName: orderData['courier'],
           dateTime: DateTime.parse(orderData['dateTime']),
+          status: orderData['status'],
+          creatorId: orderData['creatorId'],
           products: (orderData['cart'] as List<dynamic>).map((order)=>
             CartItem(
              product_id: order['product_id'],
@@ -83,7 +87,7 @@ class Orders with ChangeNotifier {
     var random              = Random.secure();
     var randoms             = random.nextInt(1000000000);
     final generateOrderCode = 'swatch#${randoms}';
-    final url               = 'https://swatch-shop.firebaseio.com/orders/$_userId.json?auth=$_authToken';
+    final url               = 'https://swatch-shop.firebaseio.com/orders.json?auth=$_authToken';
 
     try{
       
@@ -96,6 +100,8 @@ class Orders with ChangeNotifier {
           'courier': courierName,
           'total' : total,
           'dateTime': DateTime.now().toIso8601String(),
+          'status': 'processing',
+          'creatorId': _userId,
           'cart' : cart.map( (cart)=>{
               'product_id' : cart.product_id,
               'product_name': cart.product_name,
@@ -124,8 +130,14 @@ class Orders with ChangeNotifier {
         courierName: courierName,
         subTotal: subTotal,
         products: cart,
+        creatorId: _userId,
+        status: 'processing',
       ));
 
       notifyListeners();
   }
+
+  List<OrderItem> findByStatus(String status){
+    return _orders.where( (orderItem) => orderItem.status == status ).toList();
+  } 
 }

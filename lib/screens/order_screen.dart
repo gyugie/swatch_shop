@@ -24,9 +24,9 @@ class _OrderScreenState extends State<OrderScreen> with SingleTickerProviderStat
   void _setCatgories(int index){
     var value = '';
     if(index == 0 ){
-        value = 'delivered';
-    } else if (index == 1){
         value = 'processing';
+    } else if (index == 1){
+        value = 'delivered';
     } else {
         value = 'cancelled';
     }
@@ -36,9 +36,33 @@ class _OrderScreenState extends State<OrderScreen> with SingleTickerProviderStat
     });
   }
 
+  _fetchOrders() async {
+    try{
+      await Provider.of<Orders>(context).fetchAndSetOrder();
+      setState(() {
+        _isLoading = false;
+      });
+    } catch (err){
+      throw err;
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    if(_isInit){
+      _isLoading = true;
+      _fetchOrders();
+    }
+    _isInit = false;
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final deviceSize  = MediaQuery.of(context).size;
+    final deviceSize            = MediaQuery.of(context).size;
+    final statusOrderDelivered  = Provider.of<Orders>(context, listen: false).findByStatus('delivered');
+    final statusOrderCancelled  = Provider.of<Orders>(context, listen: false).findByStatus('cancelled');
+    final statusOrderProcessing = Provider.of<Orders>(context, listen: false).findByStatus('processing'); 
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
@@ -80,10 +104,10 @@ class _OrderScreenState extends State<OrderScreen> with SingleTickerProviderStat
                     },
                     tabs: [
                       Tab(
-                        text: 'Delivered',
+                        text: 'Processing',
                       ),
                       Tab(
-                        text: 'Processing',
+                        text: 'Delivered',
                       ),
                       Tab(
                         text: 'Cancelled',
@@ -96,52 +120,55 @@ class _OrderScreenState extends State<OrderScreen> with SingleTickerProviderStat
               Container(
                 height: deviceSize.height * 0.66,
                 padding: EdgeInsets.all(3),
-                child: TabBarView(
-                  controller: _controller,
-                  physics: NeverScrollableScrollPhysics(),
-                  children: <Widget>[
-                    Container(
-                        child: FutureBuilder(
-                          future: Provider.of<Orders>(context, listen: false).fetchAndSetOrder(),
-                          builder: (context,  snapshot) { 
-                              switch (snapshot.connectionState) { 
-                                case ConnectionState.none: 
-                                  return null; 
-                                case ConnectionState.waiting: 
-                                  return Center(
-                                      child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.amber)),
-                                    ); 
-                                case ConnectionState.active: 
-                                  return null; 
-                                case ConnectionState.done: 
-                                  if (snapshot.error != null){
-                                    return Center(
-                                      child: Image.asset('assets/images/cartempty.png',height: 100,),
-                                    );
-                                  } 
-                                    return Consumer<Orders>(
-                                      builder: (ctx, orderData, child) => ListView.builder(
-                                        itemCount: orderData.order.length,
-                                        itemBuilder: (ctx, index) => OrderCard(orderData.order[index]),
-                                      ),
-                                    );
-                              }
-                             return null;  // unreachable 
-                           }, 
-                        )
-                    ),
-                    Container(
-                        child: Center(
-                          child: Image.asset('assets/images/cartempty.png',height: 100,),
-                        ) 
-                    ),
-                     Container(
-                        child: Center(
-                          child: Image.asset('assets/images/cartempty.png',height: 100,),
-                        ) 
-                    ),
-                  ],
-                ),
+                child: 
+                 _isLoading
+                  ?
+                  Center(
+                    child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation(Colors.amber)),
+                  )
+                  :
+                  TabBarView(
+                    controller: _controller,
+                    physics: NeverScrollableScrollPhysics(),
+                    children: <Widget>[
+                      statusOrderProcessing.length == 0 
+                      ?
+                      Center(
+                        child: Image.asset('assets/images/cartempty.png', height: 100),
+                      )
+                      :
+                      Container(
+                        child: ListView.builder(
+                            itemCount: statusOrderProcessing.length,
+                            itemBuilder: (ctx, index) => OrderCard(statusOrderProcessing[index]),
+                          ),
+                      ),
+                      statusOrderDelivered.length == 0 
+                      ?
+                      Center(
+                        child: Image.asset('assets/images/cartempty.png', height: 100),
+                      )
+                      :
+                      Container(
+                          child: ListView.builder(
+                              itemCount: statusOrderDelivered.length,
+                              itemBuilder: (ctx, index) => OrderCard(statusOrderDelivered[index]),
+                            ),
+                      ),
+                       statusOrderCancelled.length == 0 
+                      ?
+                      Center(
+                        child: Image.asset('assets/images/cartempty.png', height: 100),
+                      )
+                      :
+                      Container(
+                        child: ListView.builder(
+                          itemCount: statusOrderCancelled.length,
+                          itemBuilder: (ctx, index) => OrderCard(statusOrderCancelled[index]),
+                        ),
+                      ),
+                    ],
+                  ),
               ),
             ],
           ),
